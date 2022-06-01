@@ -47,7 +47,7 @@
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <span class="me-2 d-none d-lg-inline text-gray-600 small">Admin</span>
-        <img class="img-profile rounded-circle" src="{{ 'https://ui-avatars.com/api/?name=Admin' }}" />
+        <img class="img-profile rounded-circle" src="{{ 'https://ui-avatars.com/api/?name='.auth()->user()->name }}" />
       </a>
       <!-- Dropdown - User Information -->
       <div class="dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="userDropdown">

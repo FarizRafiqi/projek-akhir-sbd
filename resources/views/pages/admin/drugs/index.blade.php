@@ -64,6 +64,12 @@
         }
       });
 
+      drugsTable.on("select", (e, dt, type, index) => {
+        if(type === 'row') {
+          console.log($(this).children("input[type='checkbox']"))
+        }
+      });
+
       drugsTable.on("deselect", function(e, dt, type, index) {
         if (type === 'row') {
           let rowSelected = dt.rows({

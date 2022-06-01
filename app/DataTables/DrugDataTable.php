@@ -8,6 +8,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Str;
 
 class DrugDataTable extends DataTable
 {
@@ -31,13 +32,13 @@ class DrugDataTable extends DataTable
                 return $drug->name;
             })
             ->editColumn('image', function ($drug) {
-                return $drug->image;
+                return $drug->image ?? '';
             })
             ->editColumn('price', function ($drug) {
                 return $drug->formatted_price;
             })
             ->editColumn('description', function ($drug) {
-                return $drug->description;
+                return Str::limit($drug->description);
             })
             ->editColumn('stock', function ($drug) {
                 return $drug->stock;
@@ -111,6 +112,7 @@ class DrugDataTable extends DataTable
                     'style' => 'multi',
                     'selector' => 'td:first-child',
                 ],
+                'order' => [[1, 'asc']],
                 'responsive' => true
             ]);
     }

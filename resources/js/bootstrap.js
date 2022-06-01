@@ -1,8 +1,10 @@
 window._ = require("lodash");
-window.$ = require("jquery")
-window.jQuery = require("jquery")
-require("./script")
+window.$ = require("jquery");
+window.jQuery = require("jquery");
+
 try {
+    require("jquery.easing");
+    require("./script");
     require("bootstrap/dist/js/bootstrap.bundle");
     require("datatables.net-buttons-bs5");
     require("datatables.net-buttons/js/buttons.html5.js");

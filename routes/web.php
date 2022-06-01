@@ -12,6 +12,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,11 +25,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, "index"])->name("home");
+Route::get("/", [HomeController::class, "index"])->name("home");
 
-Route::group(["as" => "admin.", "prefix" => "admin-panel"], function () {
+Route::group(["as" => "admin.", "prefix" => "admin-panel", "middleware" => ["auth", "admin"]], function () {
     Route::get("/", [DashboardController::class, "index"])->name("dashboard");
-    Route::resource('activity-logs', ActivityLogController::class)->except('create', 'store', 'edit', 'update', 'destroy');
+    Route::resource("activity-logs", ActivityLogController::class)->except("create", "store", "edit", "update", "destroy");
     Route::resources([
         "drugs" => DrugController::class,
         "drug-types" => DrugTypeController::class,
@@ -42,5 +43,3 @@ Route::group(["as" => "admin.", "prefix" => "admin-panel"], function () {
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

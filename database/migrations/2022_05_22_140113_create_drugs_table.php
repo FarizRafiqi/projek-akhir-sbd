@@ -22,7 +22,7 @@ class CreateDrugsTable extends Migration
             $table->foreignIdFor(DrugForm::class)->constrained();
             $table->foreignIdFor(Brand::class)->constrained();
             $table->string("name");
-            $table->string("image");
+            $table->string("image")->nullable();
             $table->decimal("price", 10, 2);
             $table->text("description");
             $table->integer("stock");
