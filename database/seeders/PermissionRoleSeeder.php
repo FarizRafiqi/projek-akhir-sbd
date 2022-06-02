@@ -21,9 +21,9 @@ class PermissionRoleSeeder extends Seeder
             return substr($permission->title, 0, 5) != 'user_'              &&
                    substr($permission->title, 0, 5) != 'role_'              && 
                    substr($permission->title, 0, 11) != 'permission_'       &&    
-                   substr($permission->title, 0, 9) != 'purchase_'       &&    
+                   substr($permission->title, 0, 9) != 'purchase_'          &&    
                    substr($permission->title, 0, 13) != 'activity_log_';          
         });
-        Role::findOrFail(3)->permissions()->sync($staffPermissions);
+        Role::findOrFail(2)->permissions()->sync($staffPermissions);
     }
 }

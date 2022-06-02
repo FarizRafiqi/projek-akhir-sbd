@@ -1,16 +1,16 @@
 <?php
 
-use App\Http\Controllers\ActivityLogController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DrugController;
-use App\Http\Controllers\DrugTypeController;
-use App\Http\Controllers\DrugFormController;
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DrugController;
+use App\Http\Controllers\Admin\DrugTypeController;
+use App\Http\Controllers\Admin\DrugFormController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 

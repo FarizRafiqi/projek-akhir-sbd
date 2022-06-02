@@ -23,28 +23,25 @@ class DrugDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->editColumn('drug_type_id', function ($drug) {
-                return $drug->drug_type_id;
+                return $drug->drugType->type;
             })
             ->editColumn('drug_form_id', function ($drug) {
-                return $drug->drug_form_id;
+                return $drug->drugForm->form;
             })
             ->editColumn('name', function ($drug) {
                 return $drug->name;
             })
             ->editColumn('image', function ($drug) {
-                return $drug->image ?? '';
+                return $drug->image ?? '-';
             })
             ->editColumn('price', function ($drug) {
                 return $drug->formatted_price;
             })
-            ->editColumn('description', function ($drug) {
-                return Str::limit($drug->description);
-            })
             ->editColumn('stock', function ($drug) {
-                return $drug->stock;
+                return $drug->formatted_stock;
             })
             ->addColumn('action', function ($row) {
-                $showGate       = '';
+                $showGate       = 'drug_show';
                 $editGate       = 'drug_edit';
                 $deleteGate     = 'drug_delete';
                 $crudRoutePart  = 'drugs';
@@ -126,14 +123,13 @@ class DrugDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('drug_type_id'),
-            Column::make('drug_form_id'),
-            Column::make('name'),
-            Column::make('image'),
-            Column::make('price'),
-            Column::make('description'),
-            Column::make('stock'),
-            Column::computed('action')
+            Column::make('drug_type_id')->title('Tipe Obat'),
+            Column::make('drug_form_id')->title('Bentuk Obat'),
+            Column::make('name')->title('Nama Obat'),
+            Column::make('image')->title('Gambar'),
+            Column::make('price')->title('Harga'),
+            Column::make('stock')->title('Stok'),
+            Column::computed('action')->title('Aksi')
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)

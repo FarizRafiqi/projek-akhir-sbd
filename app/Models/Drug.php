@@ -22,7 +22,13 @@ class Drug extends Model
 
     public function getFormattedPriceAttribute()
     {
-        $price = number_format($this->price, 2, ',', '.');
+        $price = number_format($this->price, 0, ',', '.');
         return "Rp $price";
+    }
+
+    public function getFormattedStockAttribute()
+    {
+        $stock = number_format($this->stock, 0, ',', '.');
+        return "$stock";
     }
 }

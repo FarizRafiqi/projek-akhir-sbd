@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
                 "email_verified_at" => now(),
                 "password" => bcrypt("rahasia123"),
                 "remember_token" => Str::random(10),
-                "role_id" => Role::find(3)->id,
+                "role_id" => Role::find(2)->id,
                 "phone_num" => "088244445555",
                 "sex" => "male"
             ],
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
                 "email_verified_at" => now(),
                 "password" => bcrypt("rahasia223"),
                 "remember_token" => Str::random(10),
-                "role_id" => Role::find(3)->id,
+                "role_id" => Role::find(2)->id,
                 "phone_num" => "088266667777",
                 "sex" => "female"
             ],
@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
                 "email_verified_at" => now(),
                 "password" => bcrypt("rahasia323"),
                 "remember_token" => Str::random(10),
-                "role_id" => Role::find(3)->id,
+                "role_id" => Role::find(2)->id,
                 "phone_num" => "088288889999",
                 "sex" => "female"
             ]

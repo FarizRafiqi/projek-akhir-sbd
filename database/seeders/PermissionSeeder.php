@@ -60,18 +60,18 @@ class PermissionSeeder extends Seeder
             ["title" => "drug_show"],
 
             // Brand Type Management
-            ["title" => "brand_type_access"],
-            ["title" => "brand_type_create"],
-            ["title" => "brand_type_update"],
-            ["title" => "brand_type_delete"],
-            ["title" => "brand_type_edit"],
+            ["title" => "drug_type_access"],
+            ["title" => "drug_type_create"],
+            ["title" => "drug_type_update"],
+            ["title" => "drug_type_delete"],
+            ["title" => "drug_type_edit"],
 
             // Brand Form Management
-            ["title" => "brand_form_access"],
-            ["title" => "brand_form_create"],
-            ["title" => "brand_form_update"],
-            ["title" => "brand_form_delete"],
-            ["title" => "brand_form_edit"],
+            ["title" => "drug_form_access"],
+            ["title" => "drug_form_create"],
+            ["title" => "drug_form_update"],
+            ["title" => "drug_form_delete"],
+            ["title" => "drug_form_edit"],
 
             // Purchase Management
             ["title" => "purchase_access"],
