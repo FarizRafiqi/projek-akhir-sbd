@@ -9,7 +9,11 @@ class Drug extends Model
 {
     use HasFactory;
     protected $with = ["drugType", "drugForm"];
-    
+    protected $fillable = [
+        "name", "drug_type_id", "drug_form_id", "brand_id",
+        "price", "stock", "image", "description"
+    ];
+
     public function drugType()
     {
         return $this->belongsTo(DrugType::class);

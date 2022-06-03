@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Drug;
 use App\Models\DrugType;
 use App\Models\DrugForm;
-use Illuminate\Http\Request;
 use App\DataTables\DrugDataTable;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DrugRequest;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +21,7 @@ class DrugController extends Controller
      */
     public function index(DrugDataTable $dataTable)
     {
-        abort_if(Gate::denies('drug_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        abort_if(Gate::denies("drug_access"), Response::HTTP_FORBIDDEN, "Forbidden");
         return $dataTable->render("pages.admin.drugs.index");
     }
 
@@ -31,20 +32,28 @@ class DrugController extends Controller
      */
     public function create()
     {
-        abort_if(Gate::denies('drug_create'), Response::HTTP_FORBIDDEN, 'Forbidden');
-        return view("pages.admin.drugs.create");
+        abort_if(Gate::denies("drug_create"), Response::HTTP_FORBIDDEN, "Forbidden");
+        $drug_types = DrugType::all();
+        $drug_forms = DrugForm::all();
+        $drug_brands = Brand::all();
+        return view("pages.admin.drugs.create", compact("drug_types", "drug_forms", "drug_brands"));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\DrugRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DrugRequest $request)
     {
-        Drug::create($request->all());
-        return back()->withSuccess('Data obat berhasil ditambahkan!');
+        $data = $request->except("image");
+        if ($image = $request->file("image")) {
+            $data["image"] = str_replace(" ", "", trim($image->getClientOriginalName()));
+            $image->storeAs("img/drugs/" . auth()->user()->id, $data["image"], "public");
+        }
+        Drug::create($data);
+        return back()->withSuccess("Data obat berhasil ditambahkan!");
     }
 
     /**
@@ -55,8 +64,8 @@ class DrugController extends Controller
      */
     public function show(Drug $drug)
     {
-        abort_if(Gate::denies('drug_show'), Response::HTTP_FORBIDDEN, 'Forbidden');
-        return view("pages.admin.drugs.show", compact('drug'));
+        abort_if(Gate::denies("drug_show"), Response::HTTP_FORBIDDEN, "Forbidden");
+        return view("pages.admin.drugs.show", compact("drug"));
     }
 
     /**
@@ -67,30 +76,31 @@ class DrugController extends Controller
      */
     public function edit(Drug $drug)
     {
-        abort_if(Gate::denies('drug_edit'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        abort_if(Gate::denies("drug_edit"), Response::HTTP_FORBIDDEN, "Forbidden");
         $drug_types = DrugType::all();
         $drug_forms = DrugForm::all();
-        return view("pages.admin.drugs.edit", compact("drug", "drug_types", "drug_forms"));
+        $drug_brands = Brand::all();
+        return view("pages.admin.drugs.edit", compact("drug", "drug_types", "drug_forms", "drug_brands"));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\DrugRequest  $request
      * @param  \App\Models\Drug  $drug
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Drug $drug)
+    public function update(DrugRequest $request, Drug $drug)
     {
-        abort_if(Gate::denies('drug_update'), Response::HTTP_FORBIDDEN, 'Forbidden');
-        $data = $request->except('image');
-        if ($image = $request->file('image')) {
-            $data['image'] = str_replace(" ", "", trim($image->getClientOriginalName()));
-            $image->storeAs('img/drugs/' . auth()->id, $data["image"], "public");
+        abort_if(Gate::denies("drug_update"), Response::HTTP_FORBIDDEN, "Forbidden");
+        $data = $request->except("image");
+        if ($image = $request->file("image")) {
+            $data["image"] = str_replace(" ", "", trim($image->getClientOriginalName()));
+            $image->storeAs("img/drugs/" . auth()->user()->id, $data["image"], "public");
         }
 
         $drug->update($data);
-        return back()->withSuccess('Data obat ' . $drug->name . ' berhasil diubah!');
+        return back()->withSuccess("Data obat " . $drug->name . " berhasil diubah!");
     }
 
     /**
@@ -101,6 +111,8 @@ class DrugController extends Controller
      */
     public function destroy(Drug $drug)
     {
-        abort_if(Gate::denies('drug_delete'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        abort_if(Gate::denies("drug_delete"), Response::HTTP_FORBIDDEN, "Forbidden");
+        $drug->delete();
+        return redirect()->back()->withSuccess("Data obat berhasil dihapus!");
     }
 }

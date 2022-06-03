@@ -1,8 +1,7 @@
 window._ = require("lodash");
-window.$ = require("jquery");
-window.jQuery = require("jquery");
 
 try {
+    window.$ = window.jQuery = require("jquery");
     require("jquery.easing");
     require("./script");
     require("bootstrap/dist/js/bootstrap.bundle");
