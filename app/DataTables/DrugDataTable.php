@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Drug;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -32,7 +33,9 @@ class DrugDataTable extends DataTable
                 return $drug->name;
             })
             ->editColumn('image', function ($drug) {
-                return $drug->image ?? '-';
+                $folder = "/img/drugs/";
+                $image =  "<img src='" . Storage::url($folder . $drug->image) . "' width='100px'>";
+                return $drug->image ? $image : '-';
             })
             ->editColumn('price', function ($drug) {
                 return $drug->formatted_price;
@@ -40,6 +43,7 @@ class DrugDataTable extends DataTable
             ->editColumn('stock', function ($drug) {
                 return $drug->formatted_stock;
             })
+            ->rawColumns(['image', 'action'])
             ->addColumn('action', function ($row) {
                 $showGate       = 'drug_show';
                 $editGate       = 'drug_edit';
@@ -47,9 +51,9 @@ class DrugDataTable extends DataTable
                 $crudRoutePart  = 'drugs';
 
                 return view('partials.datatables-action', compact(
-                    'showGate', 
-                    'editGate', 
-                    'deleteGate', 
+                    'showGate',
+                    'editGate',
+                    'deleteGate',
                     'crudRoutePart',
                     'row',
                 ));
@@ -82,23 +86,23 @@ class DrugDataTable extends DataTable
             ->orderBy(1)
             ->addCheckbox(['className' => 'select-checkbox'], true)
             ->buttons(
-                Button::make('export'),
-                Button::make('print'),
+                Button::make('export')->text('<i class="fas fa-download"></i> Ekspor'),
+                Button::make('print')->text('<i class="fas fa-print"></i> Cetak'),
                 Button::make([
-                    'text' => 'Select All',
+                    'text' => 'Pilih Semua',
                     'action' => 'function(e, dt, node, config){
                                 dt.rows().select();
                                 $(`input[type="checkbox"]`).prop(`checked`, true);
                             }',
                 ]),
                 Button::make([
-                    'text' => 'Deselect All',
+                    'text' => 'Batal Pilih Semua',
                     'action' => 'function(e, dt, node, config){
                                 dt.rows().deselect();
                             }',
                 ]),
                 Button::make([
-                    'text' => 'Delete Selected',
+                    'text' => 'Hapus yang Dipilih',
                     'className' => 'btn-danger',
                     'extend' => 'selected',
                     'attr' => ['id' => 'massDeleteDrug']
@@ -110,7 +114,7 @@ class DrugDataTable extends DataTable
                     'selector' => 'td:first-child',
                 ],
                 'order' => [[1, 'asc']],
-                'responsive' => true
+                'responsive' => true,
             ]);
     }
 

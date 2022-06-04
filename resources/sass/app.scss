@@ -9,4 +9,7 @@
 
 // Data Tables
 @import '~datatables.net-bs5/css/dataTables.bootstrap5';
+@import "~datatables.net-buttons-bs5/css/buttons.bootstrap5.css";
 @import '~datatables.net-responsive-bs5/css/responsive.bootstrap5.min';
+@import "~select2/src/scss/core";
+@import "~select2-bootstrap-5-theme/src/include-all";

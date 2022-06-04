@@ -43,8 +43,8 @@
                     <div class="mb-3">
                       <label for="drugType" class="form-label">Tipe Obat</label>
                       <select class="form-select @error('drug_type_id') is-invalid @enderror" id="drugType"
-                        name="drug_type_id">
-                        <option selected disabled>Pilih Tipe Obat</option>
+                        name="drug_type_id" data-placeholder="Pilih Tipe Obat">
+                        <option></option>
                         @foreach ($drug_types as $item)
                           <option value="{{ $item->id }}" {{ $item->id == old('drug_type_id') ? 'selected' : '' }}>
                             {{ $item->type }}
@@ -58,8 +58,8 @@
                     <div class="mb-3">
                       <label for="drugForm" class="form-label">Bentuk Obat</label>
                       <select class="form-select @error('drug_form_id') is-invalid @enderror" id="drugForm"
-                        name="drug_form_id">
-                        <option selected disabled>Pilih Bentuk Obat</option>
+                        name="drug_form_id" data-placeholder="Pilih Bentuk Obat">
+                        <option></option>
                         @foreach ($drug_forms as $item)
                           <option value="{{ $item->id }}" {{ $item->id == old('drug_form_id') ? 'selected' : '' }}>
                             {{ $item->form }}
@@ -76,8 +76,7 @@
                       <label for="price" class="form-label">Harga</label>
                       <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Rp</span>
-                        <input type="number" class="form-control @error('price') is-invalid @enderror" id="price"
-                          step="50" min="0" name="price" value="{{ old('price') }}" placeholder="Masukkan harga obat">
+                        <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" min="0" name="price" value="{{ old('price') }}" placeholder="Masukkan harga obat">
                         @error('price')
                           <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -102,15 +101,15 @@
                   </div>
                 </div>
               </div>
-              <div class="col-12">
+              <div class="col-6">
                 <div class="mb-3">
                   <label for="brand" class="form-label">Merek Obat</label>
-                  <select class="form-select @error('brand_id') is-invalid @enderror" id="brand"
-                    name="brand_id">
-                    <option selected disabled>Pilih Merek Obat</option>
+                  <select class="form-select @error('brand_id') is-invalid @enderror" id="brand" name="brand_id"
+                    data-placeholder="Pilih Merek Obat">
+                    <option></option>
                     @foreach ($drug_brands as $item)
                       <option value="{{ $item->id }}" {{ $item->id == old('brand_id') ? 'selected' : '' }}>
-                        {{ $item->form }}
+                        {{ $item->name }}
                       </option>
                     @endforeach
                   </select>
@@ -118,6 +117,8 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                   @enderror
                 </div>
+              </div>
+              <div class="col-12">
                 <div class="mb-3">
                   <label for="description" class="form-label">Deskripsi</label>
                   <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" cols="30"
@@ -151,5 +152,23 @@
     }
 
     $("#image").on("change", () => previewImg("#image", "#previewDrugImage"));
+
+    $("#brand").select2({
+      theme: "bootstrap-5",
+      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+      placeholder: $(this).data('placeholder'),
+    })
+
+    $("#drugType").select2({
+      theme: "bootstrap-5",
+      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+      placeholder: $(this).data('placeholder'),
+    })
+
+    $("#drugForm").select2({
+      theme: "bootstrap-5",
+      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+      placeholder: $(this).data('placeholder'),
+    })
   </script>
 @endpush

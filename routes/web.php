@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get("/", [HomeController::class, "index"])->name("home");
 
 Route::group(["as" => "admin.", "prefix" => "admin-panel", "middleware" => ["auth", "admin"]], function () {
+    Route::delete('drugs/destroy', [DrugController::class, "massDestroy"])->name('drugs.massDestroy');
     Route::get("/", [DashboardController::class, "index"])->name("dashboard");
     Route::resource("activity-logs", ActivityLogController::class)->except("create", "store", "edit", "update", "destroy");
     Route::resources([

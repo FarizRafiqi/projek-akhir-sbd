@@ -10,6 +10,7 @@ try {
     require("datatables.net-buttons/js/buttons.print.js");
     require("datatables.net-responsive-bs5");
     require("datatables.net-select-bs5");
+    require("select2");
 } catch (e) {}
 
 /**

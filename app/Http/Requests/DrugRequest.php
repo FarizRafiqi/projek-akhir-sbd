@@ -36,7 +36,7 @@ class DrugRequest extends FormRequest
             'brand_id' => 'required|exists:' . $brand->getTable() . ',id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|numeric|min:0',
-            'image' => 'mimes:jpg,png|max:4096',
+            'image' => 'nullable|mimes:jpg,png|max:4096',
             'description' => 'string',
         ];
     }

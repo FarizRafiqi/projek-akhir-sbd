@@ -23,7 +23,7 @@
           <h6 class="m-0 font-weight-bold">
             Daftar Obat
           </h6>
-          <a href="{{route('admin.drugs.create')}}" class="btn btn-primary">
+          <a href="{{ route('admin.drugs.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i>
             Tambah
           </a>
@@ -61,16 +61,8 @@
       $("#drugs-table").on("click.dt", "#dataTablesCheckbox", function() {
         if ($(this).is(':checked')) {
           drugsTable.rows().select();
-          // $("input[type='checkbox']").prop("checked", true)
         } else {
           drugsTable.rows().deselect();
-          // $("input[type='checkbox']").prop("checked", false)
-        }
-      });
-
-      drugsTable.on("select", (e, dt, type, index) => {
-        if(type === 'row') {
-          console.log($(this).children("input[type='checkbox']"))
         }
       });
 
@@ -106,7 +98,7 @@
         e.preventDefault();
         Swal.fire({
           title: 'Apakah kamu yakin?',
-          text: "Data presentase pajak ini akan dihapus!",
+          text: "Data obat ini akan dihapus!",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -120,7 +112,7 @@
       });
 
       function massDeleteDrug() {
-        let ids = $.map(taxRateTable.rows({
+        let ids = $.map(drugsTable.rows({
           selected: true
         }).data(), function(entry) {
           return entry.id;
@@ -134,6 +126,27 @@
           })
           return;
         }
+
+        $.ajax({
+          headers: {
+            "x-csrf-token": "{{ csrf_token() }}"
+          },
+          method: 'POST',
+          url: "{{ route('admin.drugs.massDestroy') }}",
+          data: {
+            ids: ids,
+            _method: 'DELETE'
+          }
+        }).done(function() {
+          Swal.fire({
+            title: 'Data obat berhasil dihapus',
+            icon: 'success',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              location.reload();
+            }
+          })
+        });
       }
 
       // $("#taxrate-table").on("click.dt", ".btn-edit", function(e){

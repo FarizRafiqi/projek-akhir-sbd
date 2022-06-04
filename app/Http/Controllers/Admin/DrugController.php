@@ -8,8 +8,10 @@ use App\Models\DrugForm;
 use App\DataTables\DrugDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DrugRequest;
+use App\Http\Requests\MassDestroyDrugRequest;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class DrugController extends Controller
@@ -50,7 +52,7 @@ class DrugController extends Controller
         $data = $request->except("image");
         if ($image = $request->file("image")) {
             $data["image"] = str_replace(" ", "", trim($image->getClientOriginalName()));
-            $image->storeAs("img/drugs/" . auth()->user()->id, $data["image"], "public");
+            $image->storeAs("img/drugs/uploaded", $data["image"], "public");
         }
         Drug::create($data);
         return back()->withSuccess("Data obat berhasil ditambahkan!");
@@ -96,7 +98,7 @@ class DrugController extends Controller
         $data = $request->except("image");
         if ($image = $request->file("image")) {
             $data["image"] = str_replace(" ", "", trim($image->getClientOriginalName()));
-            $image->storeAs("img/drugs/" . auth()->user()->id, $data["image"], "public");
+            $image->storeAs("img/drugs/", $data["image"], "public");
         }
 
         $drug->update($data);
@@ -112,7 +114,20 @@ class DrugController extends Controller
     public function destroy(Drug $drug)
     {
         abort_if(Gate::denies("drug_delete"), Response::HTTP_FORBIDDEN, "Forbidden");
+        Storage::disk("public")->delete("img/drugs/" . $drug->image);
         $drug->delete();
         return redirect()->back()->withSuccess("Data obat berhasil dihapus!");
+    }
+
+    public function massDestroy(MassDestroyDrugRequest $request)
+    {
+        abort_if(Gate::denies("drug_delete"), Response::HTTP_FORBIDDEN, "Forbidden");
+        $drugs = Drug::whereIn('id', request('ids'))->get();
+        foreach ($drugs as $drug) {
+            Storage::disk("public")->delete("img/drugs/" . $drug->image);
+            $drug->delete();
+        }
+
+        return redirect()->route('admin.drugs.index')->withSuccess('Data obat berhasil dihapus!');
     }
 }

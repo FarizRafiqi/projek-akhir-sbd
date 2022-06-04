@@ -24,7 +24,7 @@
         <div class="card-body">
           <div class="row gy-3">
             <div class="col-3">
-              <img src="{{ $drug->image ? Storage::url($drug->image) : asset('img/no-img.jpg') }}"
+              <img src="{{ $drug->image ? Storage::url("/img/drugs/".$drug->image) : asset('img/no-img.jpg') }}"
                 class="img-thumbnail" alt="{{ $drug->name }}" width="300" height="300">
             </div>
             <div class="col-9">
