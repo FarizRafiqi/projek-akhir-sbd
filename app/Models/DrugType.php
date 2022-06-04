@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class DrugType extends Model
 {
     use HasFactory;
+    protected $fillable = ['type'];
 
-    public function drug()
+    public function drugs()
     {
-        return $this->belongsTo(Drug::class);
+        return $this->hasMany(Drug::class);
     }
 }

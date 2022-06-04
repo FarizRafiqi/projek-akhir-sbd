@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\DrugType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\DataTables\DrugTypeDataTable;
+use App\Http\Requests\MassDestroyDrugTypeRequest;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class DrugTypeController extends Controller
 {
@@ -13,9 +17,10 @@ class DrugTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(DrugTypeDataTable $dataTable)
     {
-        //
+        abort_if(Gate::denies("drug_type_access"), Response::HTTP_FORBIDDEN, "Forbidden");
+        return $dataTable->render("pages.admin.drug-types.index");
     }
 
     /**
@@ -25,7 +30,8 @@ class DrugTypeController extends Controller
      */
     public function create()
     {
-        //
+        abort_if(Gate::denies("drug_type_create"), Response::HTTP_FORBIDDEN, "Forbidden");
+        return view("pages.admin.drug-types.create");
     }
 
     /**
@@ -36,7 +42,12 @@ class DrugTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        abort_if(Gate::denies("drug_type_create"), Response::HTTP_FORBIDDEN, "Forbidden");
+        $request->validate([
+            'type' => 'required|max:255'
+        ]);
+        DrugType::create($request->all());
+        return back()->withSuccess("Data tipe obat berhasil ditambahkan!");
     }
 
     /**
@@ -58,7 +69,8 @@ class DrugTypeController extends Controller
      */
     public function edit(DrugType $drugType)
     {
-        //
+        abort_if(Gate::denies("drug_type_edit"), Response::HTTP_FORBIDDEN, "Forbidden");
+        return view("pages.admin.drug-types.edit", compact('drugType'));
     }
 
     /**
@@ -70,7 +82,9 @@ class DrugTypeController extends Controller
      */
     public function update(Request $request, DrugType $drugType)
     {
-        //
+        abort_if(Gate::denies("drug_type_update"), Response::HTTP_FORBIDDEN, "Forbidden");
+        $drugType->update($request->all());
+        return redirect()->route('admin.drug-types.index')->withSuccess("Data tipe obat berhasil diubah!");
     }
 
     /**
@@ -81,6 +95,27 @@ class DrugTypeController extends Controller
      */
     public function destroy(DrugType $drugType)
     {
-        //
+        abort_if(Gate::denies("drug_type_delete"), Response::HTTP_FORBIDDEN, "Forbidden");
+        if($drugType->drugs()->count() > 0) {
+            alert()->error("Tipe obat tidak bisa dihapus, karena mempunyai relasi dengan data obat");
+            return back();
+        }
+        $drugType->delete();
+        return back()->withSuccess("Data tipe obat berhasil dihapus!");
+    }
+
+    public function massDestroy(MassDestroyDrugTypeRequest $request)
+    {
+        abort_if(Gate::denies("drug_type_delete"), Response::HTTP_FORBIDDEN, "Forbidden");
+        $drugTypes = DrugType::whereIn('id', request('ids'))->get();
+        foreach ($drugTypes as $drugType) {
+            if($drugType->drugs()->count() > 0) {
+                alert()->error("Satu atau lebih tipe obat tidak bisa dihapus, karena ada yang mempunyai relasi dengan data obat");
+                return back();
+            }
+            $drugType->delete();
+        }
+
+        return redirect()->route('admin.drug-types.index')->withSuccess('Data tipe obat berhasil dihapus!');
     }
 }

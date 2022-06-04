@@ -18,8 +18,6 @@ class CreatePurchasesTable extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Drug::class)->constrained();
-            $table->unsignedInteger("quantity");
             $table->decimal("total_price", 10, 2);
             $table->decimal("paid", 10, 2);
             $table->decimal("change", 10, 2);

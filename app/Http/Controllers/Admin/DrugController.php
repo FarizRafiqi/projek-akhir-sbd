@@ -51,8 +51,9 @@ class DrugController extends Controller
     {
         $data = $request->except("image");
         if ($image = $request->file("image")) {
-            $data["image"] = str_replace(" ", "", trim($image->getClientOriginalName()));
-            $image->storeAs("img/drugs/uploaded", $data["image"], "public");
+            $data["image"] = date("YmdHis_");
+            $data["image"] .= str_replace(" ", "", trim($image->getClientOriginalName()));
+            $image->storeAs("img/drugs/", $data["image"], "public");
         }
         Drug::create($data);
         return back()->withSuccess("Data obat berhasil ditambahkan!");
@@ -97,7 +98,8 @@ class DrugController extends Controller
         abort_if(Gate::denies("drug_update"), Response::HTTP_FORBIDDEN, "Forbidden");
         $data = $request->except("image");
         if ($image = $request->file("image")) {
-            $data["image"] = str_replace(" ", "", trim($image->getClientOriginalName()));
+            $data["image"] = date("YmdHis_");
+            $data["image"] .= str_replace(" ", "", trim($image->getClientOriginalName()));
             $image->storeAs("img/drugs/", $data["image"], "public");
         }
 

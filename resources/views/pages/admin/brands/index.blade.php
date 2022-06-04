@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Admin Panel Mediclo | Daftar Obat')
+@section('title', 'Admin Panel Mediclo | Daftar Merek')
 @push('styles')
   <style>
     .select-info {
@@ -15,8 +15,8 @@
     <nav
       style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item">Obat</li>
-        <li class="breadcrumb-item active">Daftar Obat</li>
+        <li class="breadcrumb-item">Merek</li>
+        <li class="breadcrumb-item active">Daftar Merek</li>
       </ol>
     </nav>
   </div>
@@ -28,27 +28,12 @@
         <!-- Card Header -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold">
-            Daftar Obat
+            Daftar Merek
           </h6>
-          <a href="{{ route('admin.drugs.create') }}" class="btn btn-primary">
+          <a href="{{ route('admin.brands.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i>
             Tambah
           </a>
-          {{-- <div class="dropdown no-arrow">
-            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-              <div class="dropdown-header">
-                Dropdown Header:
-              </div>
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </div> --}}
         </div>
         <!-- Card Body -->
         <div class="card-body">
@@ -63,18 +48,18 @@
   {{ $dataTable->scripts() }}
   <script>
     $(function() {
-      let drugsTable = window.LaravelDataTables['drugs-table'];
-      $("#drugs-table_wrapper").addClass('table-responsive')
-      $("#drugs-table").on("click.dt", "#dataTablesCheckbox", function() {
+      let brandsTable = window.LaravelDataTables['brands-table'];
+      $("#brands-table_wrapper").addClass('table-responsive')
+      $("#brands-table").on("click.dt", "#dataTablesCheckbox", function() {
         if ($(this).is(':checked')) {
-          drugsTable.rows().select();
+          brandsTable.rows().select();
           $("input[type='checkbox']").prop("checked", true)
         } else {
-          drugsTable.rows().deselect();
+          brandsTable.rows().deselect();
         }
       });
 
-      drugsTable.on("deselect", function(e, dt, type, index) {
+      brandsTable.on("deselect", function(e, dt, type, index) {
         if (type === 'row') {
           let rowSelected = dt.rows({
             selected: true
@@ -85,11 +70,11 @@
         }
       })
 
-      $("#drugs-table").on("click.dt", ".btn-delete", function(e) {
+      $("#brands-table").on("click.dt", ".btn-delete", function(e) {
         e.preventDefault();
         Swal.fire({
           title: 'Apakah kamu yakin?',
-          text: "Data obat ini akan dihapus!",
+          text: "Data merek obat ini akan dihapus!",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#0d6efd',
@@ -103,11 +88,11 @@
         })
       });
 
-      $("#massDeleteDrug").on("click", function(e) {
+      $("#massDeleteBrand").on("click", function(e) {
         e.preventDefault();
         Swal.fire({
           title: 'Apakah kamu yakin?',
-          text: "Data obat ini akan dihapus!",
+          text: "Data merek obat ini akan dihapus!",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#0d6efd',
@@ -116,13 +101,13 @@
           cancelButtonText: 'Batal'
         }).then((result) => {
           if (result.isConfirmed) {
-            massDeleteDrug();
+            massDeleteBrand();
           }
         })
       });
 
-      function massDeleteDrug() {
-        let ids = $.map(drugsTable.rows({
+      function massDeleteBrand() {
+        let ids = $.map(brandsTable.rows({
           selected: true
         }).data(), function(entry) {
           return entry.id;
@@ -142,14 +127,14 @@
             "x-csrf-token": "{{ csrf_token() }}"
           },
           method: 'POST',
-          url: "{{ route('admin.drugs.massDestroy') }}",
+          url: "{{ route('admin.brands.massDestroy') }}",
           data: {
             ids: ids,
             _method: 'DELETE'
           }
         }).done(function() {
           Swal.fire({
-            title: 'Data obat berhasil dihapus',
+            title: 'Data merek obat berhasil dihapus',
             icon: 'success',
           }).then((result) => {
             if (result.isConfirmed) {
@@ -158,13 +143,6 @@
           })
         });
       }
-
-      // $("#taxrate-table").on("click.dt", ".btn-edit", function(e){
-      //   e.preventDefault();
-      //   let id = $(this).data('id');
-      //   $("#modalEditTaxRate").modal('toggle');
-      //   Livewire.emit('edit', id);
-      // });
     })
   </script>
 @endpush

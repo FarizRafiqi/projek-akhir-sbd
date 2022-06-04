@@ -22,13 +22,13 @@
       <div class="card shadow mb-4">
         <!-- Card Body -->
         <div class="card-body">
-          <form action="{{ route('admin.drugs.update', $drug->id) }}" method="POST">
+          <form action="{{ route('admin.drugs.update', $drug->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row gy-3">
               <div class="col-md-3 col-12 text-md-start text-center">
-                <img src="{{ $drug->image ? Storage::url("/img/drugs/".$drug->image) : asset('img/no-img.jpg') }}"
-                  class="img-thumbnail" alt="{{ $drug->name }}" width="300" height="300">
+                <img src="{{ $drug->image ? Storage::url('/img/drugs/' . $drug->image) : asset('img/no-img.jpg') }}"
+                  class="img-thumbnail" alt="{{ $drug->name }}" width="300" height="300" id="previewDrugImage">
               </div>
               <div class="col-md-9 col-12">
                 <div class="row">
@@ -96,8 +96,8 @@
                     </div>
                     <div class="mb-3">
                       <label for="image" class="form-label">Gambar</label>
-                      <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image"
-                        value="{{ $drug->image }}">
+                      <input class="form-control @error('image') is-invalid @enderror" type="file" id="image"
+                        name="image">
                       @error('image')
                         <div class="invalid-feedback">{{ $message }}</div>
                       @enderror

@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class DrugForm extends Model
 {
     use HasFactory;
+    protected $fillable = ['form'];
 
-    public function drug()
+    public function drugs()
     {
-        return $this->belongsTo(Drug::class);
+        return $this->hasMany(Drug::class);
     }
 }

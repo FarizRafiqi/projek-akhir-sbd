@@ -2,13 +2,12 @@
 
 namespace App\DataTables;
 
-use App\Models\Drug;
-use Illuminate\Support\Facades\Storage;
+use App\Models\DrugForm;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class DrugDataTable extends DataTable
+class DrugFormDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -20,32 +19,14 @@ class DrugDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('drug_type_id', function ($drug) {
-                return $drug->drugType->type;
+            ->editColumn('form', function ($drug) {
+                return $drug->form;
             })
-            ->editColumn('drug_form_id', function ($drug) {
-                return $drug->drugForm->form;
-            })
-            ->editColumn('name', function ($drug) {
-                return $drug->name;
-            })
-            ->editColumn('image', function ($drug) {
-                $folder = "/img/drugs/";
-                $image =  "<img src='" . Storage::url($folder . $drug->image) . "' width='100px'>";
-                return $drug->image ? $image : '-';
-            })
-            ->editColumn('price', function ($drug) {
-                return $drug->formatted_price;
-            })
-            ->editColumn('stock', function ($drug) {
-                return $drug->formatted_stock;
-            })
-            ->rawColumns(['image', 'action'])
             ->addColumn('action', function ($row) {
-                $showGate       = 'drug_show';
-                $editGate       = 'drug_edit';
-                $deleteGate     = 'drug_delete';
-                $crudRoutePart  = 'drugs';
+                $showGate       = '';
+                $editGate       = 'drug_form_edit';
+                $deleteGate     = 'drug_form_delete';
+                $crudRoutePart  = 'drug-forms';
 
                 return view('partials.datatables-action', compact(
                     'showGate',
@@ -54,16 +35,16 @@ class DrugDataTable extends DataTable
                     'crudRoutePart',
                     'row',
                 ));
-            });
+            })->rawColumns(['action']);
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Drug $model
+     * @param \App\Models\DrugForm $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Drug $model)
+    public function query(DrugForm $model)
     {
         return $model->newQuery();
     }
@@ -76,7 +57,7 @@ class DrugDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('drugs-table')
+            ->setTableId('drugFormsTable')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
@@ -102,7 +83,7 @@ class DrugDataTable extends DataTable
                     'text' => 'Hapus yang Dipilih',
                     'className' => 'btn-danger',
                     'extend' => 'selected',
-                    'attr' => ['id' => 'massDeleteDrug']
+                    'attr' => ['id' => 'massDeleteDrugForm']
                 ]),
             )->parameters([
                 'paging' => true,
@@ -124,16 +105,11 @@ class DrugDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('drug_type_id')->title('Tipe Obat'),
-            Column::make('drug_form_id')->title('Bentuk Obat'),
-            Column::make('name')->title('Nama Obat'),
-            Column::make('image')->title('Gambar'),
-            Column::make('price')->title('Harga'),
-            Column::make('stock')->title('Stok'),
+            Column::make('form')->title('Bentuk Obat'),
             Column::computed('action')->title('Aksi')
                 ->exportable(false)
                 ->printable(false)
-                ->width(60)
+                ->width(250)
                 ->addClass('text-center'),
         ];
     }
@@ -145,6 +121,6 @@ class DrugDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Drug_' . date('YmdHis');
+        return 'DrugForm_' . date('YmdHis');
     }
 }

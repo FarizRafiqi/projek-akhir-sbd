@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Role::class)->constrained();
+            $table->foreignIdFor(Role::class)->constrained()->default(3);
             $table->string('image')->nullable()->default(NULL);
             $table->string('name');
             $table->string('email')->unique();
@@ -24,8 +24,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->text("address")->nullable();
-            $table->string("phone_num");
-            $table->enum("sex", ["male", "female"]);
+            $table->string("phone_num")->nullable();
+            $table->enum("sex", ["male", "female"])->nullable();
             $table->timestamps();
         });
     }

@@ -11,6 +11,12 @@
   <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css" />
   <!-- Custom styles for this template-->
   <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
+  <style>
+    .select-info {
+      margin-left: 0.25rem;
+    }
+  </style>
+  @stack('styles')
 </head>
 
 <body id="page-top">
@@ -46,7 +52,7 @@
         </div>
         <div class="modal-body">Pilih "Keluar" di bawah, jika kamu siap mengakhiri sesi saat ini.</div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+          <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>
           <a class="btn btn-primary" href="{{ route('logout') }}"
             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Keluar</a>
           <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

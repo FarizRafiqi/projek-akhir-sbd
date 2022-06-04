@@ -25,17 +25,21 @@
 
   <!-- Nav Item - Menu Obat -->
   @can('drug_access')
-    <li class="nav-item {{ Route::is('admin.drugs.*') ? 'active' : '' }}">
+    <li class="nav-item {{ Route::is(['admin.drugs.*', 'admin.drug-types.*', 'admin.drug-forms.*']) ? 'active' : '' }}">
       <a class="nav-link collapsed" href="#collapseTwo" data-bs-toggle="collapse">
         <i class="fas fa-fw fa-pills"></i>
         <span>Obat</span>
       </a>
-      <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionSidebar">
+      <div id="collapseTwo"
+        class="accordion-collapse collapse {{ Route::is(['admin.drugs.*', 'admin.drug-types.*', 'admin.drug-forms.*']) ? 'show' : '' }}"
+        data-bs-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded accordion-body">
           {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
-          <a class="collapse-item" href="{{ route('admin.drugs.index') }}">Daftar Obat</a>
-          <a class="collapse-item" href="#">Kategori Obat</a>
-          <a class="collapse-item" href="#">Bentuk Obat</a>
+          <a class="collapse-item {{ Route::is('admin.drugs.*') ? 'active' : '' }}"
+            href="{{ route('admin.drugs.index') }}">Daftar Obat</a>
+          <a class="collapse-item {{ Route::is('admin.drug-types.*') ? 'active' : '' }}"
+            href="{{ route('admin.drug-types.index') }}">Kategori Obat</a>
+          <a class="collapse-item {{ Route::is('admin.drug-forms.*') ? 'active' : '' }}" href="{{ route('admin.drug-forms.index') }}">Bentuk Obat</a>
         </div>
       </div>
     </li>
@@ -44,8 +48,7 @@
   <!-- Nav Item - Menu Brand -->
   @can('brand_access')
     <li class="nav-item {{ Route::is('admin.brands.*') ? 'active' : '' }}">
-      <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUtilities"
-        aria-expanded="true" aria-controls="collapseUtilities">
+      <a class="nav-link" href="{{ route('admin.brands.index') }}">
         <i class="fas fa-fw fa-trademark"></i>
         <span>Merek</span>
       </a>
@@ -55,7 +58,7 @@
   <!-- Nav Item - Menu Pembelian Obat -->
   @can('purchase_access')
     <li class="nav-item {{ Route::is('admin.purchases.*') ? 'active' : '' }}">
-      <a class="nav-link collapsed" href="#">
+      <a class="nav-link" href="{{ route('admin.purchases.index') }}">
         <i class="fas fa-fw fa-shopping-bag"></i>
         <span>Pembelian Obat</span>
       </a>
