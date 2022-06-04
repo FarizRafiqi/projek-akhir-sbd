@@ -23,27 +23,27 @@
         <!-- Card Body -->
         <div class="card-body">
           <div class="row gy-3">
-            <div class="col-3">
+            <div class="col-md-3 col-12 text-center text-md-start">
               <img src="{{ $drug->image ? Storage::url("/img/drugs/".$drug->image) : asset('img/no-img.jpg') }}"
                 class="img-thumbnail" alt="{{ $drug->name }}" width="300" height="300">
             </div>
             <div class="col-9">
               <dl>
-                <dt class="fs-5">Nama</dt>
+                <dt>Nama</dt>
                 <dd>{{ $drug->name }}</dd>
-                <dt class="fs-5">Tipe Obat</dt>
+                <dt>Tipe Obat</dt>
                 <dd>{{ $drug->drugType->type }}</dd>
-                <dt class="fs-5">Bentuk Obat</dt>
+                <dt>Bentuk Obat</dt>
                 <dd>{{ $drug->drugForm->form }}</dd>
-                <dt class="fs-5">Harga</dt>
+                <dt>Harga</dt>
                 <dd>{{ $drug->formatted_price }}</dd>
-                <dt class="fs-5">Stok</dt>
+                <dt>Stok</dt>
                 <dd>{{ $drug->stock }}</dd>
               </dl>
             </div>
             <div class="col-12">
               <dl>
-                <dt class="fs-5">Deskripsi</dt>
+                <dt>Deskripsi</dt>
                 <dd>{{ $drug->description }}</dd>
               </dl>
             </div>
