@@ -22,10 +22,6 @@
           <h6 class="m-0 font-weight-bold">
             Daftar Pembelian Obat
           </h6>
-          <a href="{{ route('admin.purchases.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i>
-            Tambah
-          </a>
         </div>
         <!-- Card Body -->
         <div class="card-body">

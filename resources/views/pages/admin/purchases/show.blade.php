@@ -22,36 +22,32 @@
       <div class="card shadow mb-4">
         <!-- Card Body -->
         <div class="card-body">
-          <div class="row">
-            <div class="col-12">
-              <dl>
-                <dt>Nama User</dt>
-                <dd>{{ $purchase->user->name }}</dd>
-                <dt>Obat yang Dibeli</dt>
-                <dd>
-                  <ul>
-                    @foreach ($purchase->details as $item)
-                      <li>{{ $item->drug->name }} x {{ $item->quantity }}</li>
-                    @endforeach
-                  </ul>
-                </dd>
-                <dt>Jumlah Obat</dt>
-                <dd>{{ $purchase->details()->sum('quantity') }}</dd>
-                <dt>Total Harga</dt>
-                <dd>{{ $purchase->formatted_total_price }}</dd>
-                <dt>Dibayar</dt>
-                <dd>{{ $purchase->formatted_paid }}</dd>
-                <dt>Kembalian</dt>
-                <dd>{{ $purchase->formatted_change }}</dd>
-                <dt>Tanggal Beli</dt>
-                <dd>{{ $purchase->buy_date }}</dd>
-                <dt>Status</dt>
-                <dd>
-                  <span class="badge rounded-pill bg-{{ $state }}">{{ $purchase->status }}</span>
-                </dd>
-              </dl>
-            </div>
-          </div>
+          <dl class="row">
+            <dt class="col-sm-3">Nama Pelanggan</dt>
+            <dd class="col-sm-9">{{ $purchase->user->name }}</dd>
+            <dt class="col-sm-3">Obat yang Dibeli</dt>
+            <dd class="col-sm-9">
+              <ul>
+                @foreach ($purchase->details as $item)
+                  <li>{{ $item->drug->name }} x {{ $item->quantity }}</li>
+                @endforeach
+              </ul>
+            </dd>
+            <dt class="col-sm-3">Jumlah Obat</dt>
+            <dd class="col-sm-9">{{ $purchase->details()->sum('quantity') }}</dd>
+            <dt class="col-sm-3">Total Harga</dt>
+            <dd class="col-sm-9">{{ $purchase->formatted_total_price }}</dd>
+            <dt class="col-sm-3">Dibayar</dt>
+            <dd class="col-sm-9">{{ $purchase->formatted_paid }}</dd>
+            <dt class="col-sm-3">Kembalian</dt>
+            <dd class="col-sm-9">{{ $purchase->formatted_change }}</dd>
+            <dt class="col-sm-3">Tanggal Beli</dt>
+            <dd class="col-sm-9">{{ date("d-m-Y H:i:s", strtotime($purchase->buy_date)) }}</dd>
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">
+              <span class="badge rounded-pill bg-{{ $state }}">{{ $purchase->status }}</span>
+            </dd>
+          </dl>
         </div>
       </div>
     </div>

@@ -80,7 +80,7 @@ class DrugDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
-            ->orderBy(1)
+            ->orderBy(1, 'asc')
             ->addCheckbox(['className' => 'select-checkbox', 'printable' => false], true)
             ->buttons(
                 Button::make('export')->text('<i class="fas fa-download"></i> Ekspor'),
@@ -110,7 +110,6 @@ class DrugDataTable extends DataTable
                     'style' => 'multi',
                     'selector' => 'td:first-child',
                 ],
-                'order' => [[1, 'asc']],
                 'responsive' => true,
             ]);
     }

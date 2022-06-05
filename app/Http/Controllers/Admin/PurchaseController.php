@@ -70,7 +70,8 @@ class PurchaseController extends Controller
      */
     public function edit(Purchase $purchase)
     {
-        //
+        abort_if(Gate::denies("purchase_edit"), Response::HTTP_FORBIDDEN, "Forbidden");
+        return view("pages.admin.purchases.edit", compact('purchase'));
     }
 
     /**

@@ -36,7 +36,7 @@ class DrugRequest extends FormRequest
             'brand_id' => 'required|exists:' . $brand->getTable() . ',id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpg,png|max:4096',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
             'description' => 'string',
         ];
     }
@@ -53,9 +53,9 @@ class DrugRequest extends FormRequest
             'description.string' => 'Deskripsi harus berupa karakter!',
             'price.numeric' => 'Harga harus berupa angka!',
             'stock.numeric' => 'Stok harus berupa angka!',
-            'drug_type_id.exists' => 'Tipe obat tidak ada di database!',
-            'drug_form_id.exists' => 'Bentuk obat tidak ada di database!',
-            'brand_id.exists' => 'Merek obat tidak ada di database!',
+            'drug_type_id.exist' => 'Tipe obat tidak ada di database!',
+            'drug_form_id.exist' => 'Bentuk obat tidak ada di database!',
+            'brand_id.exist' => 'Merek obat tidak ada di database!',
             'price.min' => 'Harga tidak boleh minus!',
             'stock.min' => 'Stok tidak boleh minus!',
             'image.max' => ['file' => 'Ukuran gambar maksimal :max KB!'],

@@ -2,12 +2,13 @@
 
 namespace App\DataTables;
 
-use App\Models\DrugType;
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class DrugTypeDataTable extends DataTable
+class UserDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -19,14 +20,31 @@ class DrugTypeDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('type', function ($drug) {
-                return $drug->type;
+            ->editColumn('role_id', function ($user) {
+                return $user->role->name;
+            })
+            ->editColumn('name', function ($user) {
+                return $user->name;
+            })
+            ->editColumn('image', function ($user) {
+                $folder = "img/avatar/" . $user->id . "/";
+                $image =  "<img src='" . Storage::url($folder . $user->image) . "' width='100px'>";
+                return $user->image ? $image : '-';
+            })
+            ->editColumn('email', function ($user) {
+                return $user->email;
+            })
+            ->editColumn('phone_num', function ($user) {
+                return $user->phone_num;
+            })
+            ->editColumn('sex', function ($user) {
+                return $user->sex == "male" ? "L" : "P";
             })
             ->addColumn('action', function ($row) {
-                $showGate       = '';
-                $editGate       = 'drug_type_edit';
-                $deleteGate     = 'drug_type_delete';
-                $crudRoutePart  = 'drug-types';
+                $showGate       = 'user_show';
+                $editGate       = 'user_edit';
+                $deleteGate     = 'user_delete';
+                $crudRoutePart  = 'users';
 
                 return view('partials.datatables-action', compact(
                     'showGate',
@@ -35,16 +53,16 @@ class DrugTypeDataTable extends DataTable
                     'crudRoutePart',
                     'row',
                 ));
-            })->rawColumns(['action']);
+            })->rawColumns(['action', 'image']);
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\DrugType $model
+     * @param \App\Models\User $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(DrugType $model)
+    public function query(User $model)
     {
         return $model->newQuery();
     }
@@ -57,7 +75,7 @@ class DrugTypeDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('drugTypesTable')
+            ->setTableId('users-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
@@ -83,7 +101,7 @@ class DrugTypeDataTable extends DataTable
                     'text' => 'Hapus yang Dipilih',
                     'className' => 'btn-danger',
                     'extend' => 'selected',
-                    'attr' => ['id' => 'massDeleteDrugType']
+                    'attr' => ['id' => 'massDeleteUser']
                 ]),
             )->parameters([
                 'paging' => true,
@@ -104,7 +122,12 @@ class DrugTypeDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('type')->title('Tipe Obat'),
+            Column::make('role_id')->title('Peran'),
+            Column::make('name')->title('Nama'),
+            Column::make('image')->title('Gambar'),
+            Column::make('email')->title('Email'),
+            Column::make('phone_num')->title('No. Telepon'),
+            Column::make('sex')->title('Jenis Kelamin'),
             Column::computed('action')->title('Aksi')
                 ->exportable(false)
                 ->printable(false)
@@ -120,6 +143,6 @@ class DrugTypeDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'DrugType_' . date('YmdHis');
+        return 'User_' . date('YmdHis');
     }
 }

@@ -84,14 +84,12 @@ class PurchaseDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
-            ->orderBy(1)
-            ->addCheckbox(['className' => 'select-checkbox', 'printable' => false], true)
+            ->orderBy(1, 'asc')
             ->buttons(
                 Button::make('export')->text('<i class="fas fa-download"></i> Ekspor'),
                 Button::make('print')->text('<i class="fas fa-print"></i> Cetak'),
             )->parameters([
                 'paging' => true,
-                'order' => [[1, 'asc']],
                 'responsive' => true,
             ]);
     }
@@ -105,7 +103,7 @@ class PurchaseDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('user_id')->title('Nama User'),
+            Column::make('user_id')->title('Nama Pelanggan'),
             Column::make('total_price')->title('Total Harga'),
             Column::make('paid')->title('Dibayar'),
             Column::make('change')->title('Kembalian'),
