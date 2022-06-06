@@ -66,7 +66,7 @@
         e.preventDefault();
         Swal.fire({
           title: 'Apakah kamu yakin?',
-          text: "Data bentuk obat ini akan dihapus!",
+          text: "Data bentuk obat ini akan dihapus.",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#0d6efd',
@@ -84,7 +84,7 @@
         e.preventDefault();
         Swal.fire({
           title: 'Apakah kamu yakin?',
-          text: "Data bentuk obat ini akan dihapus!",
+          text: "Data-data bentuk obat ini akan dihapus.",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#0d6efd',
@@ -93,12 +93,12 @@
           cancelButtonText: 'Batal'
         }).then((result) => {
           if (result.isConfirmed) {
-            massDeleteDrugType();
+            massDeleteDrugForm();
           }
         })
       });
 
-      function massDeleteDrugType() {
+      function massDeleteDrugForm() {
         let ids = $.map(drugFormsTable.rows({
           selected: true
         }).data(), function(entry) {
@@ -107,7 +107,7 @@
 
         if (ids.length === 0) {
           Swal.fire({
-            title: 'Tidak ada data yang dipilih!',
+            title: 'Tidak ada data yang dipilih.',
             icon: 'warning',
             confirmButtonColor: '#3085d6',
           })
@@ -126,7 +126,7 @@
           }
         }).done(() => {
           Swal.fire({
-            title: 'Data bentuk obat berhasil dihapus',
+            title: 'Data-data bentuk obat berhasil dihapus.',
             icon: 'success',
           }).then((result) => {
             if (result.isConfirmed) {

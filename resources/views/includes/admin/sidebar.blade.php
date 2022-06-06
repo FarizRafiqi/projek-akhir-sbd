@@ -39,7 +39,8 @@
             href="{{ route('admin.drugs.index') }}">Daftar Obat</a>
           <a class="collapse-item {{ Route::is('admin.drug-types.*') ? 'active' : '' }}"
             href="{{ route('admin.drug-types.index') }}">Kategori Obat</a>
-          <a class="collapse-item {{ Route::is('admin.drug-forms.*') ? 'active' : '' }}" href="{{ route('admin.drug-forms.index') }}">Bentuk Obat</a>
+          <a class="collapse-item {{ Route::is('admin.drug-forms.*') ? 'active' : '' }}"
+            href="{{ route('admin.drug-forms.index') }}">Bentuk Obat</a>
         </div>
       </div>
     </li>
@@ -67,17 +68,24 @@
 
   <!-- Nav Item - Menu Manajemen User -->
   @can('user_access')
-    <li class="nav-item {{ Route::is('admin.users.*') ? 'active' : '' }}">
+    <li
+      class="nav-item {{ Route::is(['admin.users.*', 'admin.permissions.*', 'admin.roles.*', 'admin.activity-logs.index']) ? 'active' : '' }}">
       <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#manajemenUser">
         <i class="fas fa-fw fa-users-cog"></i>
         <span>Manajemen User</span>
       </a>
-      <div id="manajemenUser" class="collapse {{ Route::is(['admin.users.*', 'admin.permissions.*', 'admin.roles.*', 'admin.activity-logs.index']) ? 'show' : '' }}" data-bs-parent="#accordionSidebar">
+      <div id="manajemenUser"
+        class="collapse {{ Route::is(['admin.users.*', 'admin.permissions.*', 'admin.roles.*', 'admin.activity-logs.index']) ? 'show' : '' }}"
+        data-bs-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <a class="collapse-item {{ Route::is('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">User</a>
-          <a class="collapse-item {{ Route::is('admin.permissions.*') ? 'active' : '' }}" href="{{ route('admin.permissions.index') }}">Hak Akses</a>
-          <a class="collapse-item {{ Route::is('admin.roles.*') ? 'active' : '' }}" href="{{ route('admin.roles.index') }}">Peran</a>
-          <a class="collapse-item {{ Route::is('admin.activity-logs.*') ? 'active' : '' }}" href="{{ route('admin.activity-logs.index') }}">Log Aktivitas</a>
+          <a class="collapse-item {{ Route::is('admin.users.*') ? 'active' : '' }}"
+            href="{{ route('admin.users.index') }}">User</a>
+          <a class="collapse-item {{ Route::is('admin.permissions.*') ? 'active' : '' }}"
+            href="{{ route('admin.permissions.index') }}">Hak Akses</a>
+          <a class="collapse-item {{ Route::is('admin.roles.*') ? 'active' : '' }}"
+            href="{{ route('admin.roles.index') }}">Peran</a>
+          <a class="collapse-item {{ Route::is('admin.activity-logs.index') ? 'active' : '' }}"
+            href="{{ route('admin.activity-logs.index') }}">Log Aktivitas</a>
         </div>
       </div>
     </li>

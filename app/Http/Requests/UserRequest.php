@@ -25,8 +25,12 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
+        $route = $this->route()->getName();
+        $route = explode(".", $route);
+        $route = end($route);
+
         $role = new Role();
-        return [
+        $data = [
             "role_id" => "required|exists:" . $role->getTable() . ",id|not_in:1",
             "image" => "nullable|image|mimes:jpg,jpeg,png|max:2048",
             "name" => "required|string|max:255",
@@ -38,8 +42,16 @@ class UserRequest extends FormRequest
             "address" => "nullable|string",
             "phone_num" => "nullable|digits_between:0,14",
             "sex" => "nullable|in:male,female",
-            "password" => "nullable|min:6",
+            "password" => "required|min:6",
         ];
+
+        if ($route == "update") {
+            $data["password"] = "nullable|min:6";
+        } else if ($route == "store") {
+            $data["password"] = "required|min:6";
+        }
+
+        return $data;
     }
 
     public function messages()
@@ -60,6 +72,7 @@ class UserRequest extends FormRequest
             "address.string" => "Alamat harus berupa string.",
             "phone_num.digits_between" => "No. telepon harus berada diantara :min dan :max digit.",
             "sex.in" => "Jenis kelamin yang dipilih tidak valid.",
+            "password.required" => "Password tidak boleh kosong.",
             "password.min" => "Password minimal terdiri dari :min karakter.",
         ];
     }

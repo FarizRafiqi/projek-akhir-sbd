@@ -83,7 +83,10 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, Purchase $purchase)
     {
-        //
+        abort_if(Gate::denies("purchase_update"), Response::HTTP_FORBIDDEN, "Forbidden");
+        $request->validate(["status" => "in:success,pending,failed"]);
+        $purchase->update($request->all());
+        return redirect()->route("admin.purchases.index")->withSuccess("Data pembelian obat berhasil diubah");
     }
 
     /**

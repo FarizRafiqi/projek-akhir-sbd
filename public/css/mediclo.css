@@ -1,0 +1,21 @@
+/* Homepage Style */
+.product-recommendation-item {
+    width: 200px;
+}
+
+.carousel-control-prev-icon.control-custom,
+.carousel-control-next-icon.control-custom {
+    width: 35px;
+    height: 35px;
+    background-size: 18px 18px;
+}
+
+.icon-square {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 5rem;
+    font-size: 1.5rem;
+    border-radius: 0.75rem;
+}

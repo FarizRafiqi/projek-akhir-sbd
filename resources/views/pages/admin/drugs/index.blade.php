@@ -89,7 +89,7 @@
         e.preventDefault();
         Swal.fire({
           title: 'Apakah kamu yakin?',
-          text: "Data obat ini akan dihapus!",
+          text: "Data obat ini akan dihapus.",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#0d6efd',
@@ -107,7 +107,7 @@
         e.preventDefault();
         Swal.fire({
           title: 'Apakah kamu yakin?',
-          text: "Data obat ini akan dihapus!",
+          text: "Data-data obat ini akan dihapus.",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#0d6efd',
@@ -130,7 +130,7 @@
 
         if (ids.length === 0) {
           Swal.fire({
-            title: 'Tidak ada data yang dipilih!',
+            title: 'Tidak ada data yang dipilih.',
             icon: 'warning',
             confirmButtonColor: '#3085d6',
           })
@@ -149,7 +149,7 @@
           }
         }).done(function() {
           Swal.fire({
-            title: 'Data obat berhasil dihapus',
+            title: 'Data-data obat berhasil dihapus.',
             icon: 'success',
           }).then((result) => {
             if (result.isConfirmed) {

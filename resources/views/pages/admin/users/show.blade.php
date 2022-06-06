@@ -25,7 +25,7 @@
           <div class="row">
             <div class="col-md-3 col-12 text-center text-md-start">
               <img
-                src="{{ $user->image ? Storage::url('/img/users/' . $user->id . '/' . $user->image) : asset('img/no-img.jpg') }}"
+                src="{{ $user->image ? Storage::url('/img/avatar/' . $user->id . '/' . $user->image) : asset('img/no-img.jpg') }}"
                 class="img-thumbnail" alt="{{ $user->name }}" width="300" height="300">
             </div>
             <div class="col-9">
@@ -47,7 +47,11 @@
                   <dd>{{ $user->address ?? '-' }}</dd>
                   <dt>Bergabung Pada</dt>
                   <dd>
-                    {{ $user->created_at->locale('id')->dayName . $user->created_at->format(', d ') . $user->created_at->locale('id')->monthName . date(' Y') }}
+                    @if ($user->created_at)
+                      {{ $user->created_at->locale('id')->dayName . $user->created_at->format(', d ') . $user->created_at->locale('id')->monthName . date(' Y') }}
+                    @else
+                      -
+                    @endif
                   </dd>
                 </div>
               </dl>

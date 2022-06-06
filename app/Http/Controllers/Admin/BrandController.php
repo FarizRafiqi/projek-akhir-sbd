@@ -47,7 +47,7 @@ class BrandController extends Controller
             'name' => 'required|max:255'
         ]);
         Brand::create($request->all());
-        return back()->withSuccess("Data merek berhasil ditambahkan!");
+        return back()->withSuccess("Data merek berhasil ditambahkan.");
     }
 
     /**
@@ -84,7 +84,7 @@ class BrandController extends Controller
     {
         abort_if(Gate::denies("brand_update"), Response::HTTP_FORBIDDEN, "Forbidden");
         $brand->update($request->all());
-        return redirect()->route('admin.brands.index')->withSuccess("Data merek berhasil diubah!");
+        return redirect()->route('admin.brands.index')->withSuccess("Data merek berhasil diubah.");
     }
 
     /**
@@ -101,7 +101,7 @@ class BrandController extends Controller
             return back();
         }
         $brand->delete();
-        return back()->withSuccess("Data merek obat berhasil dihapus!");
+        return back()->withSuccess("Data merek obat berhasil dihapus.");
     }
 
     public function massDestroy(MassDestroyBrandRequest $request)
@@ -116,6 +116,6 @@ class BrandController extends Controller
             $brand->delete();
         }
 
-        return redirect()->route('admin.brands.index')->withSuccess('Data merek obat berhasil dihapus!');
+        return redirect()->route('admin.brands.index')->withSuccess('Data merek obat berhasil dihapus.');
     }
 }

@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\UserDataTable;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MassDestroyDrugRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Role;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -48,19 +49,19 @@ class UserController extends Controller
         abort_if(Gate::denies("user_create"), Response::HTTP_FORBIDDEN, "Forbidden");
 
         $data = $request->except("image");
+        $data["password"] = Hash::make($data["password"]);
+        $user = User::create($data);
+
         if ($image = $request->file("image")) {
             $data["image"] = date("YmdHis_");
             $data["image"] .= str_replace(" ", "", trim($image->getClientOriginalName()));
 
-            $lastInsertedId = User::all()->last()->id + 1;
-            $folder = "img/avatar/" . $lastInsertedId . "/";
+            $folder = "img/avatar/" . $user->id . "/";
             $image->storeAs($folder, $data["image"], "public");
+            $user->update(["image" => $data["image"]]);
         }
-        
-        $data["password"] = Hash::make($data["password"]);
-        User::create($data);
 
-        return redirect()->route("admin.users.index")->withSuccess("Data user berhasil ditambahkan!");
+        return redirect()->route("admin.users.index")->withSuccess("Data user berhasil ditambahkan.");
     }
 
     /**
@@ -84,7 +85,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
         abort_if(Gate::denies("user_edit"), Response::HTTP_FORBIDDEN, "Forbidden");
-        return view("pages.admin.users.edit", compact("user"));
+        $roles = Role::all();
+        return view("pages.admin.users.edit", compact("user", "roles"));
     }
 
     /**
@@ -104,8 +106,7 @@ class UserController extends Controller
             $data["image"] = date("YmdHis_");
             $data["image"] .= str_replace(" ", "", trim($image->getClientOriginalName()));
 
-            $userId = auth()->user()->id;
-            $folder = "img/avatar/" . $userId . "/";
+            $folder = "img/avatar/" . $user->id . "/";
             $image->storeAs($folder, $data["image"], "public");
         }
 
@@ -113,7 +114,8 @@ class UserController extends Controller
             $data['password'] = Hash::make($data["password"]);
         }
 
-        return redirect()->route("admin.users.index")->withSuccess("Data user berhasil diubah!");
+        $user->update($data);
+        return redirect()->route("admin.users.index")->withSuccess("Data user berhasil diubah.");
     }
 
     /**
@@ -126,7 +128,28 @@ class UserController extends Controller
     {
         abort_if(Gate::denies("user_delete"), Response::HTTP_FORBIDDEN, "Forbidden");
 
+        if ($user->purchases()->count() > 0) {
+            alert()->error("Data user tidak dapat dihapus, karena mempunyai relasi dengan data pembelian.");
+            return back();
+        }
+
+        Storage::disk("public")->deleteDirectory("img/avatar/" . $user->id);
         $user->delete();
-        return redirect()->route("admin.users.index")->withSuccess("Data user berhasil dihapus!");
+        return redirect()->route("admin.users.index")->withSuccess("Data user berhasil dihapus.");
+    }
+
+    public function massDestroy(MassDestroyDrugRequest $request)
+    {
+        abort_if(Gate::denies("drug_delete"), Response::HTTP_FORBIDDEN, "Forbidden");
+        $users = User::whereIn('id', request('ids'))->get();
+        foreach ($users as $user) {
+            if ($user->purchases()->count() > 0) {
+                return response("Data user tidak dapat dihapus, karena mempunyai relasi dengan data pembelian.", 500);
+            }
+            Storage::disk("public")->deleteDirectory("img/avatar/" . $user->id);
+            $user->delete();
+        }
+
+        return redirect()->route('admin.drugs.index')->withSuccess('Data user berhasil dihapus.');
     }
 }

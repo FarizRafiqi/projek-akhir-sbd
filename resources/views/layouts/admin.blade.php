@@ -12,6 +12,7 @@
   <!-- Custom styles for this template-->
   <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
   <style>
+    /* Untuk memberi jarak tulisan "(n) row selected" dengan tulisan di sebelah kirinya (Data Table) */
     .select-info {
       margin-left: 0.25rem;
     }

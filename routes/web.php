@@ -33,6 +33,9 @@ Route::group(["as" => "admin.", "prefix" => "admin-panel", "middleware" => ["aut
     Route::delete('drug-forms/destroy', [DrugFormController::class, "massDestroy"])->name('drug-forms.massDestroy');
     Route::delete('brands/destroy', [BrandController::class, "massDestroy"])->name('brands.massDestroy');
     Route::delete('users/destroy', [UserController::class, "massDestroy"])->name('users.massDestroy');
+    Route::delete('permissions/destroy', [PermissionController::class, "massDestroy"])->name('permissions.massDestroy');
+    Route::delete('roles/destroy', [RoleController::class, "massDestroy"])->name('roles.massDestroy');
+
     Route::get("/", [DashboardController::class, "index"])->name("dashboard");
     Route::resource("activity-logs", ActivityLogController::class)->except("create", "store", "edit", "update", "destroy");
     Route::resources([

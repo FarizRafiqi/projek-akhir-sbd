@@ -56,7 +56,7 @@ class DrugController extends Controller
             $image->storeAs("img/drugs/", $data["image"], "public");
         }
         Drug::create($data);
-        return back()->withSuccess("Data obat berhasil ditambahkan!");
+        return back()->withSuccess("Data obat berhasil ditambahkan.");
     }
 
     /**
@@ -104,7 +104,7 @@ class DrugController extends Controller
         }
 
         $drug->update($data);
-        return back()->withSuccess("Data obat " . $drug->name . " berhasil diubah!");
+        return back()->withSuccess("Data obat " . $drug->name . " berhasil diubah.");
     }
 
     /**
@@ -118,7 +118,7 @@ class DrugController extends Controller
         abort_if(Gate::denies("drug_delete"), Response::HTTP_FORBIDDEN, "Forbidden");
         Storage::disk("public")->delete("img/drugs/" . $drug->image);
         $drug->delete();
-        return redirect()->back()->withSuccess("Data obat berhasil dihapus!");
+        return redirect()->back()->withSuccess("Data obat berhasil dihapus.");
     }
 
     public function massDestroy(MassDestroyDrugRequest $request)
@@ -130,6 +130,6 @@ class DrugController extends Controller
             $drug->delete();
         }
 
-        return redirect()->route('admin.drugs.index')->withSuccess('Data obat berhasil dihapus!');
+        return redirect()->route('admin.drugs.index')->withSuccess('Data obat berhasil dihapus.');
     }
 }

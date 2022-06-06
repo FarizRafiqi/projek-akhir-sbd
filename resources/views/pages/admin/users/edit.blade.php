@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Ubah Obat ' . $drug->id)
+@section('title', 'Ubah User')
 
 @section('content')
   <!-- Page Heading -->
@@ -8,10 +8,10 @@
     <nav
       style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item">Obat</li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.drugs.index') }}"
-            class="text-decoration-none text-reset">Daftar Obat</a></li>
-        <li class="breadcrumb-item active">Ubah Obat {{ $drug->id }}</li>
+        <li class="breadcrumb-item">Manajemen User</li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}"
+            class="text-decoration-none text-reset">Daftar User</a></li>
+        <li class="breadcrumb-item active">Ubah User</li>
       </ol>
     </nav>
   </div>
@@ -22,119 +22,117 @@
       <div class="card shadow mb-4">
         <!-- Card Body -->
         <div class="card-body">
-          <form action="{{ route('admin.drugs.update', $drug->id) }}" method="POST" enctype="multipart/form-data">
+          <form action="{{ route('admin.users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            <input type="hidden" name="id" value="{{ $user->id }}">
             <div class="row gy-3">
               <div class="col-md-3 col-12 text-md-start text-center">
-                <img src="{{ $drug->image ? Storage::url('/img/drugs/' . $drug->image) : asset('img/no-img.jpg') }}"
-                  class="img-thumbnail" alt="{{ $drug->name }}" width="300" height="300" id="previewDrugImage">
+                <img
+                  src="{{ $user->image ? Storage::url('/img/avatar/' . $user->id . '/' . $user->image) : asset('img/no-img.jpg') }}"
+                  class="img-thumbnail" alt="" width="240" id="previewUserImage">
               </div>
               <div class="col-md-9 col-12">
                 <div class="row">
                   <div class="col-md-6 col-12">
                     <div class="mb-3">
                       <label for="name" class="form-label">Nama</label>
-                      <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                        value="{{ old('drug_name', $drug->name) }}" name="name">
+                      <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
+                        value="{{ old('name', $user->name) }}" placeholder="Masukkan nama pengguna">
                       @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                       @enderror
                     </div>
                     <div class="mb-3">
-                      <label for="drugType" class="form-label">Tipe Obat</label>
-                      <select class="form-select @error('drug_type_id') is-invalid @enderror" id="drugType"
-                        name="drug_type_id" data-placeholder="Pilih Tipe Obat">
-                        <option></option>
-                        @foreach ($drug_types as $item)
-                          <option value="{{ $item->id }}"
-                            {{ $item->id == old('drug_type_id', $drug->drug_type_id) ? 'selected' : '' }}>
-                            {{ $item->type }}
-                          </option>
-                        @endforeach
+                      <label for="role" class="form-label">Peran</label>
+                      <select class="form-select @error('role_id') is-invalid @enderror" id="role" name="role_id">
+                        @if (!$user->isAdmin())
+                          <option selected disabled>Pilih Peran</option>
+                          @foreach ($roles as $role)
+                            @if ($role->id > 1)
+                              <option value="{{ $role->id }}"
+                                {{ $role->id == old('role_id', $user->role_id) ? 'selected' : '' }}>
+                                {{ $role->name }}
+                              </option>
+                            @endif
+                          @endforeach
+                        @else
+                          <option selected disabled>{{ $roles->first()->name }}</option>
+                        @endif
                       </select>
-                      @error('drug_type_id')
+                      @error('role_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                       @enderror
                     </div>
                     <div class="mb-3">
-                      <label for="drugForm" class="form-label">Bentuk Obat</label>
-                      <select class="form-select @error('drug_form_id') is-invalid @enderror" id="drugForm"
-                        name="drug_form_id" data-placeholder="Pilih Bentuk Obat">
-                        <option></option>
-                        @foreach ($drug_forms as $item)
-                          <option value="{{ $item->id }}"
-                            {{ $item->id == old('drug_form_id', $drug->drug_form_id) ? 'selected' : '' }}>
-                            {{ $item->form }}
-                          </option>
-                        @endforeach
-                      </select>
-                      @error('drug_form_id')
+                      <label for="phone_num" class="form-label">No. Telepon</label>
+                      <input type="text" class="form-control @error('phone_num') is-invalid @enderror" id="phone_num"
+                        name="phone_num" value="{{ old('phone_num', $user->phone_num) }}"
+                        placeholder="Masukkan nomor telepon">
+                      @error('phone_num')
                         <div class="invalid-feedback">{{ $message }}</div>
                       @enderror
                     </div>
                   </div>
                   <div class="col-md-6 col-12">
                     <div class="mb-3">
-                      <label for="price" class="form-label">Harga</label>
-                      <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">Rp</span>
-                        <input type="number" class="form-control @error('price') is-invalid @enderror" id="price"
-                          value="{{ old('price', $drug->price) }}" name="price">
-                        @error('price')
-                          <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                      <label for="sex" class="form-label">Jenis Kelamin</label>
+                      <div class="form-control ps-0 border-0 bg-transparent">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="sex" id="male" value="male"
+                            {{ old('sex', $user->sex) == 'male' ? 'checked' : '' }}>
+                          <label class="form-check-label" for="male">Laki-laki</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="sex" id="female" value="female"
+                            {{ old('sex', $user->sex) == 'female' ? 'checked' : '' }}>
+                          <label class="form-check-label" for="female">Perempuan</label>
+                        </div>
                       </div>
-                    </div>
-                    <div class="mb-3">
-                      <label for="stock" class="form-label">Stok</label>
-                      <input type="number" class="form-control @error('stock') is-invalid @enderror" id="stock"
-                        value="{{ $drug->stock }}" name="stock">
-                      @error('stock')
+                      @error('sex')
                         <div class="invalid-feedback">{{ $message }}</div>
                       @enderror
                     </div>
                     <div class="mb-3">
-                      <label for="image" class="form-label">Gambar</label>
-                      <input class="form-control @error('image') is-invalid @enderror" type="file" id="image"
-                        name="image">
-                      @error('image')
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                        name="email" value="{{ old('email', $user->email) }}" placeholder="Masukkan email">
+                      @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
+                    </div>
+                    <div class="mb-3">
+                      <label for="password" class="form-label">Password</label>
+                      <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
+                        name="password" placeholder="Masukkan password">
+                      @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
                       @enderror
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-6">
+              <div class="col-md-4">
                 <div class="mb-3">
-                  <label for="brand" class="form-label">Merek Obat</label>
-                  <select class="form-select @error('brand_id') is-invalid @enderror" id="brand" name="brand_id"
-                    data-placeholder="Pilih Merek Obat">
-                    <option></option>
-                    @foreach ($drug_brands as $item)
-                      <option value="{{ $item->id }}"
-                        {{ $item->id == old('brand_id', $drug->brand_id) ? 'selected' : '' }}>
-                        {{ $item->name }}
-                      </option>
-                    @endforeach
-                  </select>
-                  @error('brand_id')
+                  <label for="image" class="form-label">Gambar</label>
+                  <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image">
+                  @error('image')
                     <div class="invalid-feedback">{{ $message }}</div>
                   @enderror
                 </div>
               </div>
               <div class="col-12">
                 <div class="mb-3">
-                  <label for="description" class="form-label">Deskripsi</label>
-                  <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" cols="30"
-                    rows="5" placeholder="Masukkan deskripsi">{{ old('description', $drug->description) }}</textarea>
-                  @error('description')
+                  <label for="address" class="form-label">Alamat</label>
+                  <textarea class="form-control @error('address') is-invalid @enderror" name="address" id="address" cols="30" rows="5"
+                    placeholder="Masukkan alamat">{{ old('address', $user->address) }}</textarea>
+                  @error('address')
                     <div class="invalid-feedback">{{ $message }}</div>
                   @enderror
                 </div>
               </div>
               <div class="col-12 text-end">
-                <a href="{{ route('admin.drugs.index') }}" class="btn btn-danger">Batal</a>
+                <a href="{{ route('admin.users.index') }}" class="btn btn-danger">Batal</a>
                 <button type="submit" class="btn btn-primary">Kirim</button>
               </div>
             </div>
@@ -156,24 +154,6 @@
       }
     }
 
-    $("#image").on("change", () => previewImg("#image", "#previewDrugImage"));
-
-    $("#brand").select2({
-      theme: "bootstrap-5",
-      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-      placeholder: $(this).data('placeholder'),
-    })
-
-    $("#drugType").select2({
-      theme: "bootstrap-5",
-      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-      placeholder: $(this).data('placeholder'),
-    })
-
-    $("#drugForm").select2({
-      theme: "bootstrap-5",
-      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-      placeholder: $(this).data('placeholder'),
-    })
+    $("#image").on("change", () => previewImg("#image", "#previewUserImage"));
   </script>
 @endpush

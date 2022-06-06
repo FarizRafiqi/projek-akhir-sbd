@@ -50,7 +50,7 @@
     $(() => {
       let usersTable = window.LaravelDataTables['users-table'];
       $("#users-table_wrapper").addClass('table-responsive')
-      $("#users-table").on("click.dt", "#dataTablesCheckbox", () => {
+      usersTable.on("click.dt", "#dataTablesCheckbox", function() {
         if ($(this).is(':checked')) {
           usersTable.rows().select();
           $("input[type='checkbox']").prop("checked", true)
@@ -59,7 +59,15 @@
         }
       });
 
+      // Untuk memberikan properti checked ketika rownya diselect
+      usersTable.on("select", (e, dt, type, index) => {
+        usersTable[type](index).nodes().to$().find("td.select-checkbox > input[type='checkbox']").prop("checked",
+          true)
+      });
+
       usersTable.on("deselect", (e, dt, type, index) => {
+        usersTable[type](index).nodes().to$().find("td.select-checkbox > input[type='checkbox']").prop("checked",
+          false)
         if (type === 'row') {
           let rowSelected = dt.rows({
             selected: true
@@ -70,11 +78,11 @@
         }
       })
 
-      $("#users-table").on("click.dt", ".btn-delete", (e) => {
+      usersTable.on("click.dt", ".btn-delete", (e) => {
         e.preventDefault();
         Swal.fire({
           title: 'Apakah kamu yakin?',
-          text: "Data user ini akan dihapus!",
+          text: "Data user ini akan dihapus.",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#0d6efd',
@@ -92,7 +100,7 @@
         e.preventDefault();
         Swal.fire({
           title: 'Apakah kamu yakin?',
-          text: "Data user ini akan dihapus!",
+          text: "Data-data user ini akan dihapus.",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#0d6efd',
@@ -101,12 +109,12 @@
           cancelButtonText: 'Batal'
         }).then((result) => {
           if (result.isConfirmed) {
-            massDeleteDrug();
+            massDeleteUser();
           }
         })
       });
 
-      function massDeleteDrug() {
+      const massDeleteUser = () => {
         let ids = $.map(usersTable.rows({
           selected: true
         }).data(), (entry) => {
@@ -115,7 +123,7 @@
 
         if (ids.length === 0) {
           Swal.fire({
-            title: 'Tidak ada data yang dipilih!',
+            title: 'Tidak ada data yang dipilih.',
             icon: 'warning',
             confirmButtonColor: '#3085d6',
           })
@@ -131,17 +139,24 @@
           data: {
             ids: ids,
             _method: 'DELETE'
+          },
+          error: (xhr, status, error) => {
+            Swal.fire({
+              title: xhr.responseText,
+              icon: 'error',
+            })
+          },
+          success: (result, status, xhr) => {
+            Swal.fire({
+              title: 'Data-data user berhasil dihapus.',
+              icon: 'success',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                location.reload();
+              }
+            })
           }
-        }).done(() => {
-          Swal.fire({
-            title: 'Data user berhasil dihapus',
-            icon: 'success',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              location.reload();
-            }
-          })
-        });
+        })
       }
 
       // $("#users-table").on("click.dt", ".btn-edit", function(e){

@@ -35,9 +35,10 @@ class UserDataTable extends DataTable
                 return $user->email;
             })
             ->editColumn('phone_num', function ($user) {
-                return $user->phone_num;
+                return $user->phone_num ?? "-";
             })
             ->editColumn('sex', function ($user) {
+                if (!$user->sex) return "-";
                 return $user->sex == "male" ? "L" : "P";
             })
             ->addColumn('action', function ($row) {

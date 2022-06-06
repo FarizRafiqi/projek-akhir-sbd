@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "bootstrap": "^5.2.0-beta1",
+        "bootstrap-select": "^1.14.0-beta3",
         "datatables.net": "^1.12.1",
         "datatables.net-buttons": "^2.2.3",
         "datatables.net-buttons-bs5": "^2.2.3",

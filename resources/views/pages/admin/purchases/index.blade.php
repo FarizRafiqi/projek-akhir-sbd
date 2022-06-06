@@ -38,24 +38,6 @@
     $(() => {
       let purchasesTable = window.LaravelDataTables['purchases-table'];
       $("#purchases-table_wrapper").addClass('table-responsive');
-
-      // $("#purchases-table").on("click.dt", ".btn-delete", function(e) {
-      //   e.preventDefault();
-      //   Swal.fire({
-      //     title: 'Apakah kamu yakin?',
-      //     text: "Data merek obat ini akan dihapus!",
-      //     icon: 'warning',
-      //     showCancelButton: true,
-      //     confirmButtonColor: '#0d6efd',
-      //     cancelButtonColor: '#bb2d3b',
-      //     confirmButtonText: 'Ya',
-      //     cancelButtonText: 'Batal'
-      //   }).then((result) => {
-      //     if (result.isConfirmed) {
-      //       $(e.target).parent().submit();
-      //     }
-      //   })
-      // });
     })
   </script>
 @endpush

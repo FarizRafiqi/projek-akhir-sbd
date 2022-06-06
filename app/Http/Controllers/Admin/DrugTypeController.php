@@ -47,7 +47,7 @@ class DrugTypeController extends Controller
             'type' => 'required|max:255'
         ]);
         DrugType::create($request->all());
-        return back()->withSuccess("Data tipe obat berhasil ditambahkan!");
+        return back()->withSuccess("Data tipe obat berhasil ditambahkan.");
     }
 
     /**
@@ -84,7 +84,7 @@ class DrugTypeController extends Controller
     {
         abort_if(Gate::denies("drug_type_update"), Response::HTTP_FORBIDDEN, "Forbidden");
         $drugType->update($request->all());
-        return redirect()->route('admin.drug-types.index')->withSuccess("Data tipe obat berhasil diubah!");
+        return redirect()->route('admin.drug-types.index')->withSuccess("Data tipe obat berhasil diubah.");
     }
 
     /**
@@ -101,7 +101,7 @@ class DrugTypeController extends Controller
             return back();
         }
         $drugType->delete();
-        return back()->withSuccess("Data tipe obat berhasil dihapus!");
+        return back()->withSuccess("Data tipe obat berhasil dihapus.");
     }
 
     public function massDestroy(MassDestroyDrugTypeRequest $request)
@@ -110,12 +110,12 @@ class DrugTypeController extends Controller
         $drugTypes = DrugType::whereIn('id', request('ids'))->get();
         foreach ($drugTypes as $drugType) {
             if($drugType->drugs()->count() > 0) {
-                alert()->error("Satu atau lebih tipe obat tidak bisa dihapus, karena ada yang mempunyai relasi dengan data obat");
+                alert()->error("Satu atau lebih tipe obat tidak bisa dihapus, karena ada yang mempunyai relasi dengan data obat.");
                 return back();
             }
             $drugType->delete();
         }
 
-        return redirect()->route('admin.drug-types.index')->withSuccess('Data tipe obat berhasil dihapus!');
+        return redirect()->route('admin.drug-types.index')->withSuccess('Data tipe obat berhasil dihapus.');
     }
 }

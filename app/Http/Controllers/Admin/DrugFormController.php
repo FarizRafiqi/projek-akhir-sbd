@@ -47,7 +47,7 @@ class DrugFormController extends Controller
             'form' => 'required|max:255'
         ]);
         DrugForm::create($request->all());
-        return back()->withSuccess("Data bentuk obat berhasil ditambahkan!");
+        return back()->withSuccess("Data bentuk obat berhasil ditambahkan.");
     }
 
     /**
@@ -84,7 +84,7 @@ class DrugFormController extends Controller
     {
         abort_if(Gate::denies("drug_form_update"), Response::HTTP_FORBIDDEN, "Forbidden");
         $drugForm->update($request->all());
-        return redirect()->route('admin.drug-forms.index')->withSuccess("Data bentuk obat berhasil diubah!");
+        return redirect()->route('admin.drug-forms.index')->withSuccess("Data bentuk obat berhasil diubah.");
     }
 
     /**
@@ -101,7 +101,7 @@ class DrugFormController extends Controller
             return back();
         }
         $drugForm->delete();
-        return back()->withSuccess("Data bentuk obat berhasil dihapus!");
+        return back()->withSuccess("Data bentuk obat berhasil dihapus.");
     }
 
     public function massDestroy(MassDestroyDrugFormRequest $request)
@@ -116,6 +116,6 @@ class DrugFormController extends Controller
             $drugForm->delete();
         }
 
-        return redirect()->route('admin.drug-forms.index')->withSuccess('Data bentuk obat berhasil dihapus!');
+        return redirect()->route('admin.drug-forms.index')->withSuccess('Data bentuk obat berhasil dihapus.');
     }
 }

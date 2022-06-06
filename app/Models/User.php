@@ -62,4 +62,9 @@ class User extends Authenticatable
     {
         return ($this->role_id === 2 ? true : false);
     }
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
 }
