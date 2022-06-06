@@ -32,7 +32,7 @@
             height="271" style="bottom: 5%; right: 15%;">
           <div class="position-absolute" style="top: 35%;left: 15%;">
             <h3>Mau Beli Obat?</h3>
-            <h1 class="fw-bold">Beli di Mediclo aja!</h1>
+            <h1 class="fw-bold">Beli di {{ \Str::title(env('APP_NAME')) }} aja!</h1>
             <h5>Dijamin pasti lebih murah</h5>
           </div>
         </div>
@@ -67,14 +67,18 @@
     <section class="container-fluid mt-5">
       <h2 class="fw-bold ms-0">Kategori Obat</h2>
       <div class="row mt-3">
-        <div class="card col-2" style="width: 118px;height: 118px">
-          <div class="card-body text-center">
-            <a href="#" class="text-decoration-none text-reset"><i class="fas fa-pills fs-1 mt-2 text-primary"></i>
-              <p>Obat Bebas</p>
-            </a>
+        @foreach ($drugTypes as $drugType)
+          <div class="card col-2 {{ $loop->iteration > 1 ? 'ms-3' : '' }}" style="width: 118px;height: 118px">
+            <div class="card-body text-center">
+              {{-- Warna iconnya masih hardcode untuk kedepannya mungkin ngga begini --}}
+              <a href="{{ route('show-by-category', $drugType->slug) }}" class="text-decoration-none text-reset"><i
+                  class="{{ $drugType->image }} fs-1 mt-2 @if ($loop->iteration == 1) {{ 'text-primary' }} @elseif($loop->iteration == 2){{ 'text-warning' }} @elseif($loop->iteration == 3){{ 'text-danger' }} @endif"></i>
+                <p>{{ $drugType->type }}</p>
+              </a>
+            </div>
           </div>
-        </div>
-        <div class="card col-2 ms-3" style="width: 118px;height: 118px">
+        @endforeach
+        {{-- <div class="card col-2 ms-3" style="width: 118px;height: 118px">
           <div class="card-body text-center">
             <a href="#" class="text-decoration-none text-reset">
               <i class="fas fa-receipt fs-1 mt-2 text-warning"></i>
@@ -89,7 +93,7 @@
               <p>Covid Related</p>
             </a>
           </div>
-        </div>
+        </div> --}}
       </div>
     </section>
 
@@ -297,70 +301,6 @@
             class="img-fluid" width="100"></div>
       </div>
     </section>
-
-    <footer class="pt-4 mt-md-3 mb-md-1 pt-md-5 border-top">
-      <div class="row">
-        <div class="col-12 col-md">
-          <img class="mb-2" src="{{ asset('img/mediclo-logo.png') }}" alt="" width="160">
-          <div class="row g-2 row-cols-1">
-            <div class="col d-flex align-items-start">
-              <div class="flex-shrink-0 me-3">
-                <i class="fab fa-whatsapp fs-2 text-dark"></i>
-              </div>
-              <div>
-                <h5>WhatsApp</h5>
-                <p>0897654321</p>
-              </div>
-            </div>
-            <div class="col d-flex align-items-start">
-              <div class="flex-shrink-0 me-3">
-                <i class="fas fa-envelope fs-2 text-dark"></i>
-              </div>
-              <div>
-                <h5>Email</h5>
-                <p>mediclo@gmail.com</p>
-              </div>
-            </div>
-            <div class="col d-flex align-items-start">
-              <div class="flex-shrink-0 me-3">
-                <i class="fas fa-phone-volume fs-2 text-dark"></i>
-              </div>
-              <div>
-                <h5>Call Center</h5>
-                <p>0897654321</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 col-md">
-          <h5>Bantuan</h5>
-          <ul class="list-unstyled text-small">
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Tentang kami</a></li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Kebijakan Privasi</a></li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Tim Kesehatan</a></li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Pemesanan dan Pembayaran</a>
-            </li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Pengiriman</a></li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">FAQ</a></li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Syarat dan Ketentuan</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md">
-          <h5>Media Sosial</h5>
-          <ul class="list-unstyled text-small">
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Instagram</a></li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Facebook</a></li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Youtube</a></li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Linked In</a></li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Twitter</a></li>
-            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Whatsapp</a></li>
-          </ul>
-        </div>
-        <div class="col-12">
-          <p class="d-block mb-3 text-muted text-center">© {{ date('Y') }} All Right Reserved {{ env('APP_NAME') }}</p>
-        </div>
-      </div>
-    </footer>
   </div>
 @endsection
 @push('scripts')

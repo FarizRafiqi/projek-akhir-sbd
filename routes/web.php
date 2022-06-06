@@ -11,6 +11,9 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ProductCatalogController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,6 +29,15 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get("/", [HomeController::class, "index"])->name("home");
+Route::get("/katalog-produk", [ProductCatalogController::class, "index"])->name("product-catalog");
+Route::post("/katalog-produk", [ProductCatalogController::class, "searchProduct"])->name("search-product");
+Route::get("/katalog-produk/{drug_type:slug}", [ProductCatalogController::class, "showByCategory"])->name("show-by-category");
+Route::get("/produk/{drug}", [ProductCatalogController::class, "detailProduct"])->name("product-detail");
+
+Route::group(["middleware" => "auth"], function() {
+    Route::get("/checkout", [CheckoutController::class, "index"])->name("checkout");
+    Route::resource("/keranjang", CartController::class);
+});
 
 Route::group(["as" => "admin.", "prefix" => "admin-panel", "middleware" => ["auth", "admin"]], function () {
     Route::delete('drugs/destroy', [DrugController::class, "massDestroy"])->name('drugs.massDestroy');

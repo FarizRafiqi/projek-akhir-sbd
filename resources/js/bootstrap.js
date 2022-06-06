@@ -3,8 +3,7 @@ window._ = require("lodash");
 try {
     window.$ = window.jQuery = require("jquery");
     require("jquery.easing");
-    require("./script");
-
+    
     // Supaya plugin bootstrap-selectnya bisa jalan harus disimpan ke dalam window.bootstrap
     window.bootstrap = require("bootstrap/dist/js/bootstrap.bundle");
     require("datatables.net-buttons-bs5");
@@ -14,6 +13,7 @@ try {
     require("datatables.net-select-bs5");
     // require("select2");
     require("bootstrap-select/dist/js/bootstrap-select.min.js");
+    require("./script");
 } catch (e) {}
 
 /**

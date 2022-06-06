@@ -19,8 +19,14 @@ class DrugTypeDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('type', function ($drug) {
-                return $drug->type;
+            ->editColumn('type', function ($drugType) {
+                return $drugType->type;
+            })
+            ->editColumn('image', function ($drugType) {
+                return $drugType->image ? "<i class='" . $drugType->image . " text-center fs-3'></i>" : "-";
+            })
+            ->editColumn('slug', function ($drugType) {
+                return $drugType->slug ?? '-';
             })
             ->addColumn('action', function ($row) {
                 $showGate       = '';
@@ -35,7 +41,7 @@ class DrugTypeDataTable extends DataTable
                     'crudRoutePart',
                     'row',
                 ));
-            })->rawColumns(['action']);
+            })->rawColumns(['action', 'image']);
     }
 
     /**
@@ -105,6 +111,8 @@ class DrugTypeDataTable extends DataTable
         return [
             Column::make('id'),
             Column::make('type')->title('Tipe Obat'),
+            Column::make('image')->title('Icon')->addClass("text-center"),
+            Column::make('slug'),
             Column::computed('action')->title('Aksi')
                 ->exportable(false)
                 ->printable(false)

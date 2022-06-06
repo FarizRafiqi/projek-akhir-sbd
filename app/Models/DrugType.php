@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DrugType extends Model
 {
     use HasFactory;
-    protected $fillable = ['type'];
+    protected $guarded = [];
 
     public function drugs()
     {

@@ -13,9 +13,11 @@ class CreateDrugTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('drug_types', function (Blueprint $table) {
+        Schema::create("drug_types", function (Blueprint $table) {
             $table->id();
             $table->string("type");
+            $table->string("image")->nullable();
+            $table->string("slug")->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ class CreateDrugTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('drug_types');
+        Schema::dropIfExists("drug_types");
     }
 }

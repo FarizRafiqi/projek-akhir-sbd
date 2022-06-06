@@ -63,4 +63,9 @@
             );
         e.preventDefault();
     });
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("logout-form").submit();
+    });
 })(); // End of use strict
