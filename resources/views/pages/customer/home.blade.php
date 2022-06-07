@@ -78,22 +78,6 @@
             </div>
           </div>
         @endforeach
-        {{-- <div class="card col-2 ms-3" style="width: 118px;height: 118px">
-          <div class="card-body text-center">
-            <a href="#" class="text-decoration-none text-reset">
-              <i class="fas fa-receipt fs-1 mt-2 text-warning"></i>
-              <p>Obat Resep</p>
-            </a>
-          </div>
-        </div>
-        <div class="card col-2 ms-3" style="width: 118px;height: 118px">
-          <div class="card-body text-center">
-            <a href="#" class="text-decoration-none text-reset">
-              <i class="fas fa-virus fs-1 mt-2 text-danger"></i>
-              <p>Covid Related</p>
-            </a>
-          </div>
-        </div> --}}
       </div>
     </section>
 

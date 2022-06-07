@@ -14,12 +14,15 @@
 
       <!-- Left Side Of Navbar -->
       <ul class="navbar-nav col-md-4 mt-4 mt-md-0">
-        <form action="#" class="w-100" role="search">
-          <div class="input-group">
-            <input type="search" class="form-control border-end-0" placeholder="Cari obat...">
-            <button class="input-group-text bg-light border-start-0" id="search"><i class="fas fa-search"></i></button>
-          </div>
-        </form>
+        @if (!Route::is('checkout'))
+          <form action="#" class="w-100" role="search">
+            <div class="input-group">
+              <input type="search" class="form-control border-end-0" placeholder="Cari obat...">
+              <button class="input-group-text bg-light border-start-0" id="search"><i
+                  class="fas fa-search"></i></button>
+            </div>
+          </form>
+        @endif
       </ul>
 
       <!-- Right Side Of Navbar -->
@@ -39,28 +42,30 @@
               </li>
             @endif
           @else
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="d-md-none">Pesanan saya</span>
-              </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false" v-pre>
-                {{ \Str::limit(Auth::user()->name, 25) }}
-              </a>
-
-              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{{ route('logout') }}" id="logoutBtn">
-                  {{ __('Logout') }}
+            @if (!Route::is('checkout'))
+              <li class="nav-item">
+                <a class="nav-link" href="{{ route('keranjang.index') }}">
+                  <i class="fas fa-shopping-cart"></i>
+                  <span class="d-md-none">Pesanan saya</span>
+                </a>
+              </li>
+              <li class="nav-item dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false" v-pre>
+                  {{ \Str::limit(Auth::user()->name, 25) }}
                 </a>
 
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                  @csrf
-                </form>
-              </div>
-            </li>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{{ route('logout') }}" id="logoutBtn">
+                    {{ __('Logout') }}
+                  </a>
+
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                  </form>
+                </div>
+              </li>
+            @endif
           @endguest
         </div>
       </ul>

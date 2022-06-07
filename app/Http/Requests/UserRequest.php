@@ -25,10 +25,6 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        $route = $this->route()->getName();
-        $route = explode(".", $route);
-        $route = end($route);
-
         $role = new Role();
         $data = [
             "role_id" => "required|exists:" . $role->getTable() . ",id|not_in:1",
@@ -45,9 +41,9 @@ class UserRequest extends FormRequest
             "password" => "required|min:6",
         ];
 
-        if ($route == "update") {
+        if ($this->route()->named("admin.users.update")) {
             $data["password"] = "nullable|min:6";
-        } else if ($route == "store") {
+        } else if ($this->route()->named("admin.users.store")) {
             $data["password"] = "required|min:6";
         }
 

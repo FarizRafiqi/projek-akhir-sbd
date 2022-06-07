@@ -18,7 +18,8 @@ class ProductCatalogController extends Controller
         $drugTypes = DrugType::all();
         $drugForms = DrugForm::all();
         $brands = Brand::all();
-        return view("pages.customer.products", compact("drugTypes", "drugForms", "brands"));
+        $drugs = Drug::all();
+        return view("pages.customer.products", compact("drugTypes", "drugForms", "brands", "drugs"));
     }
 
     /**

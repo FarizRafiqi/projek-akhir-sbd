@@ -13,6 +13,7 @@ try {
     require("datatables.net-select-bs5");
     // require("select2");
     require("bootstrap-select/dist/js/bootstrap-select.min.js");
+    require("bootstrap-input-spinner/src/bootstrap-input-spinner.js")
     require("./script");
 } catch (e) {}
 

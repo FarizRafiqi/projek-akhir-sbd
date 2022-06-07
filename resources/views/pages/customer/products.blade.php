@@ -131,8 +131,14 @@
                     @foreach ($drugTypes as $item)
                       @if ($loop->iteration <= 5)
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="{{ $item->id }}"
-                            id="{{ $item->type }}" {{ $drugType->id == $item->id ? 'checked' : '' }}>
+                          @if (isset($drugType))
+                            <input class="form-check-input" type="checkbox" value="{{ $item->id }}"
+                              id="{{ $item->type }}" {{ $drugType->id == $item->id ? 'checked' : '' }}>
+                          @else
+                            <input class="form-check-input" type="checkbox" value="{{ $item->id }}"
+                              id="{{ $item->type }}" checked>
+                          @endif
+
                           <label class="form-check-label" for="{{ $item->type }}">
                             {{ $item->type }}
                           </label>
@@ -245,8 +251,8 @@
         <div class="row mt-4" id="product-list">
           @forelse ($drugs as $drug)
             <div class="col col-md-3">
-              <a href="{{ route('product-detail', Str::of($drug->name)->slug('-')) }}"
-                class="text-decoration-none text-reset" title="{{ $drug->name }}">
+              <a href="{{ route('product-detail', $drug->slug) }}" class="text-decoration-none text-reset"
+                title="{{ $drug->name }}">
                 <div class="card mb-3 shadow-sm">
                   <img src="{{ $drug->image ? Storage::url('/img/drugs/' . $drug->image) : asset('img/no-img.jpg') }}"
                     class="card-img-top">
@@ -258,7 +264,7 @@
               </a>
             </div>
           @empty
-            <span class="col-12 text-center">Hasil Tidak Ditemukan</span>
+            <span class="col-12 text-center empty-text">Hasil Tidak Ditemukan.</span>
           @endforelse
         </div>
       </div>
@@ -272,6 +278,10 @@
       "drug_forms": [],
       "drug_types": [],
     }
+
+    $("#drugTypeFilter input:checked").each(function() {
+      selectedFilter["drug_types"].push($(this).val());
+    });
 
     $("#btnPriceFilter").on("click", function() {
       const minPrice = parseInt($("#minPrice").val());
@@ -288,30 +298,57 @@
     });
 
     $("#brandFilter .form-check-input").on("click", function() {
+      const val = $(this).val();
       if ($(this).is(":checked")) {
-        selectedFilter["brands"].push($(this).val());
-        setTimeout(() => {
-          filterProduct(selectedFilter);
-        }, 1000);
+        if (selectedFilter["brands"].indexOf(val) === -1) {
+          selectedFilter["brands"].push(val);
+        }
+      } else {
+        const idx = selectedFilter["brands"].indexOf(val);
+        if (idx > -1) {
+          selectedFilter["brands"].splice(idx, 1);
+        }
       }
+      setTimeout(() => {
+        filterProduct(selectedFilter);
+      }, 1000);
     });
 
     $("#drugTypeFilter .form-check-input").on("click", function() {
+      const val = $(this).val();
       if ($(this).is(":checked")) {
-        selectedFilter["drug_types"].push($(this).val());
-        setTimeout(() => {
-          filterProduct(selectedFilter);
-        }, 1000);
+        if (selectedFilter["drug_types"].indexOf(val) === -1) {
+          selectedFilter["drug_types"].push(val);
+        }
+      } else {
+        const idx = selectedFilter["drug_types"].indexOf(val);
+        console.log(selectedFilter)
+        if (idx > -1) {
+          selectedFilter["drug_types"].splice(idx, 1);
+        }
       }
+      console.log(selectedFilter)
+      setTimeout(() => {
+        filterProduct(selectedFilter);
+      }, 1000);
     });
 
     $("#drugFormFilter .form-check-input").on("click", function() {
+      const val = $(this).val();
       if ($(this).is(":checked")) {
-        selectedFilter["drug_forms"].push($(this).val());
-        setTimeout(() => {
-          filterProduct(selectedFilter);
-        }, 1000);
+        if (selectedFilter["drug_forms"].indexOf(val) === -1) {
+          selectedFilter["drug_forms"].push(val);
+        }
+      } else {
+        const idx = selectedFilter["drug_forms"].indexOf(val);
+        if (idx > -1) {
+          selectedFilter["drug_forms"].splice(idx, 1);
+        }
       }
+
+      setTimeout(() => {
+        filterProduct(selectedFilter);
+      }, 1000);
     });
 
     $("#selectBrand").on("shown.bs.select", function() {
@@ -364,7 +401,12 @@
         data,
         success: (result, status, xhr) => {
           if (result) {
-            $("#totalProduct").text(result.length);
+            const totalData = parseInt(result.length);
+            $("#totalProduct").text(totalData);
+            if (totalData === 0) {
+              $("#product-list").append(`<span class="col-12 text-center empty-text">Hasil Tidak Ditemukan.</span>`)
+            }
+
             $.each(result, function(i, data) {
               let name = data.name.substr(0, 20) + '...';
               let price = new Intl.NumberFormat('id-ID', {
@@ -373,9 +415,12 @@
                 'minimumFractionDigits': 0
               }).format(data.price);
 
+              let url = "{{ route('product-detail', ':id') }}";
+              url = url.replace(":id", data.slug)
+              
               $("#product-list").append(`
                 <div class="col col-md-3">
-                  <a href="#" class="text-decoration-none text-reset" title="${data.name}">
+                  <a href=${url} class="text-decoration-none text-reset" title="${data.name}">
                     <div class="card mb-3 shadow-sm">
                       <img src="${data.image ? `{{ Storage::url('/img/drugs/${data.image}') }}` : `{{ asset('img/no-img.jpg') }}`}"
                         class="card-img-top">

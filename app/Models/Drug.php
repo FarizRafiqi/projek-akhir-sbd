@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Drug extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
     protected $with = ["drugType", "drugForm"];
     protected $fillable = [
         "name", "drug_type_id", "drug_form_id", "brand_id",
-        "price", "stock", "image", "description"
+        "price", "stock", "image", "description", "slug"
     ];
 
     public function drugType()
@@ -34,5 +35,19 @@ class Drug extends Model
     {
         $stock = number_format($this->stock, 0, ',', '.');
         return "$stock";
+    }
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
     }
 }

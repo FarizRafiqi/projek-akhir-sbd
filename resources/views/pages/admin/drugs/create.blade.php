@@ -42,9 +42,8 @@
                     </div>
                     <div class="mb-3">
                       <label for="drugType" class="form-label">Tipe Obat</label>
-                      <select class="form-select @error('drug_type_id') is-invalid @enderror" id="drugType"
-                        name="drug_type_id" data-placeholder="Pilih Tipe Obat">
-                        <option></option>
+                      <select class="selectpicker form-control @error('drug_type_id') is-invalid @enderror" id="drugType"
+                        name="drug_type_id" data-live-search="true">
                         @foreach ($drug_types as $item)
                           <option value="{{ $item->id }}" {{ $item->id == old('drug_type_id') ? 'selected' : '' }}>
                             {{ $item->type }}
@@ -57,9 +56,8 @@
                     </div>
                     <div class="mb-3">
                       <label for="drugForm" class="form-label">Bentuk Obat</label>
-                      <select class="form-select @error('drug_form_id') is-invalid @enderror" id="drugForm"
-                        name="drug_form_id" data-placeholder="Pilih Bentuk Obat">
-                        <option></option>
+                      <select class="selectpicker form-control @error('drug_form_id') is-invalid @enderror" id="drugForm"
+                        name="drug_form_id" data-live-search="true">
                         @foreach ($drug_forms as $item)
                           <option value="{{ $item->id }}" {{ $item->id == old('drug_form_id') ? 'selected' : '' }}>
                             {{ $item->form }}
@@ -104,8 +102,8 @@
               <div class="col-6">
                 <div class="mb-3">
                   <label for="brand" class="form-label">Merek Obat</label>
-                  <select class="form-select @error('brand_id') is-invalid @enderror" id="brand" name="brand_id"
-                    data-placeholder="Pilih Merek Obat">
+                  <select class="selectpicker form-control @error('brand_id') is-invalid @enderror" id="brand" name="brand_id"
+                    data-placeholder="Pilih Merek Obat" data-live-search="true">
                     <option></option>
                     @foreach ($drug_brands as $item)
                       <option value="{{ $item->id }}" {{ $item->id == old('brand_id') ? 'selected' : '' }}>
@@ -152,23 +150,5 @@
     }
 
     $("#image").on("change", () => previewImg("#image", "#previewDrugImage"));
-
-    $("#brand").select2({
-      theme: "bootstrap-5",
-      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-      placeholder: $(this).data('placeholder'),
-    })
-
-    $("#drugType").select2({
-      theme: "bootstrap-5",
-      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-      placeholder: $(this).data('placeholder'),
-    })
-
-    $("#drugForm").select2({
-      theme: "bootstrap-5",
-      width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-      placeholder: $(this).data('placeholder'),
-    })
   </script>
 @endpush

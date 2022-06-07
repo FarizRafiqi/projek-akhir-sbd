@@ -22,7 +22,6 @@
 
   <!-- Package --->
   <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css" />
-  @livewireStyles
   @stack('styles')
 </head>
 
@@ -36,9 +35,15 @@
     </main>
   </div>
   <script src="{{ asset('js/app.js') }}"></script>
-  @livewireScripts
+  @include('sweetalert::alert')
   @stack('scripts')
   <script src="{{ asset('vendor/fontawesome-free/js/all.js') }}"></script>
+  <script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  </script>
 </body>
 
 </html>

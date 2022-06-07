@@ -32,10 +32,11 @@ Route::get("/", [HomeController::class, "index"])->name("home");
 Route::get("/katalog-produk", [ProductCatalogController::class, "index"])->name("product-catalog");
 Route::post("/katalog-produk", [ProductCatalogController::class, "searchProduct"])->name("search-product");
 Route::get("/katalog-produk/{drug_type:slug}", [ProductCatalogController::class, "showByCategory"])->name("show-by-category");
-Route::get("/produk/{drug}", [ProductCatalogController::class, "detailProduct"])->name("product-detail");
+Route::get("/produk/{drug:slug}", [ProductCatalogController::class, "detailProduct"])->name("product-detail");
 
-Route::group(["middleware" => "auth"], function() {
+Route::group(["middleware" => "auth"], function () {
     Route::get("/checkout", [CheckoutController::class, "index"])->name("checkout");
+    Route::delete("/keranjang/destroy-selected-item", [CartController::class, "massDestroy"])->name("keranjang.massDestroy");
     Route::resource("/keranjang", CartController::class);
 });
 

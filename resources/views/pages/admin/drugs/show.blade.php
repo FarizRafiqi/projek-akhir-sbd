@@ -43,6 +43,8 @@
             </div>
             <div class="col-12">
               <dl>
+                <dt>Slug</dt>
+                <dd>{{ $drug->slug }}</dd>
                 <dt>Deskripsi</dt>
                 <dd>{{ $drug->description }}</dd>
               </dl>

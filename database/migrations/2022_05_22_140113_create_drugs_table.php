@@ -26,6 +26,7 @@ class CreateDrugsTable extends Migration
             $table->decimal("price", 10, 0);
             $table->text("description");
             $table->integer("stock");
+            $table->string("slug")->nullable()->default(null);
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Drug;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DrugSeeder extends Seeder
 {
@@ -28,6 +29,7 @@ class DrugSeeder extends Seeder
                 "price" => $value->price,
                 "description" => $value->description,
                 "stock" => rand(100, 1000),
+                "slug" => Str::of($value->name)->slug()
             ]);
         }
     }
