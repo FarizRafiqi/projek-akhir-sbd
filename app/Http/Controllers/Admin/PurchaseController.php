@@ -19,7 +19,16 @@ class PurchaseController extends Controller
     public function index(PurchaseDataTable $dataTable)
     {
         abort_if(Gate::denies("purchase_access"), Response::HTTP_FORBIDDEN, "Forbidden");
-        return $dataTable->render("pages.admin.purchases.index");
+        $filter = null;
+        $status = request()->status;
+        if ($status) {
+            if ($status == "all") {
+                $filter = Purchase::whereIn("status", config('const')['purchase_statuses']);
+            } else {
+                $filter = Purchase::where("status", $status);
+            }
+        }
+        return $dataTable->with("filter", $filter)->render("pages.admin.purchases.index");
     }
 
     /**

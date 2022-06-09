@@ -46,7 +46,7 @@ class ProductCatalogController extends Controller
             })->when(!empty($request->price), function ($query) use ($request) {
                 $query->whereBetween("price", [$request->price["min"], $request->price["max"]]);
             });
-        })->get();
+        })->orderBy("name", $request->order_by)->get();
 
         return response($result);
     }

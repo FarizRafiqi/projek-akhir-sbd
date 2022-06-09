@@ -10,9 +10,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DrugRequest;
 use App\Http\Requests\MassDestroyDrugRequest;
 use App\Models\Brand;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
+use Yajra\DataTables\Facades\DataTables;
 
 class DrugController extends Controller
 {
@@ -24,7 +26,34 @@ class DrugController extends Controller
     public function index(DrugDataTable $dataTable)
     {
         abort_if(Gate::denies("drug_access"), Response::HTTP_FORBIDDEN, "Forbidden");
-        return $dataTable->render("pages.admin.drugs.index");
+        if (!request()->has("action")) {
+            return $dataTable->render("pages.admin.drugs.index");
+        }
+
+        $data = [];
+        if (request()->action == "filter_1") {
+            // SELECT name, price FROM drugs WHERE price > (SELECT AVG(price) FROM drugs);
+            $avg = Drug::avg("price");
+            $filter = Drug::where("price", ">", $avg);
+            $data = ["priceAvg" => $avg];
+        } elseif (request()->action == "filter_2") {
+            $avg = Drug::avg("price");
+            $filter = Drug::where("price", "<", $avg);
+            $data = ["priceAvg" => $avg];
+        } elseif (request()->action == "filter_3") {
+            /**
+             * SELECT name, price 
+             *  FROM drugs
+             *  WHERE price = (
+             *      SELECT MAX(price) FROM drugs
+             *  );
+             */
+            $priceMax = Drug::max("price");
+            $filter = Drug::where("price", "=", $priceMax);
+            $data = ["priceMax" => $priceMax];
+        }
+        
+        return $dataTable->with("filter", $filter)->render("pages.admin.drugs.index", $data);
     }
 
     /**
@@ -131,5 +160,9 @@ class DrugController extends Controller
         }
 
         return redirect()->route('admin.drugs.index')->withSuccess('Data obat berhasil dihapus.');
+    }
+
+    public function filter(DrugDataTable $dataTable)
+    {
     }
 }

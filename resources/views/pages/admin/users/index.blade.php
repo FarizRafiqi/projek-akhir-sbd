@@ -6,7 +6,6 @@
     .select-info {
       margin-left: 0.25rem;
     }
-
   </style>
 @endpush
 @section('content')
@@ -28,16 +27,65 @@
         <!-- Card Header -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold">
-            Daftar User
+            Daftar User {{ request()->action == 'filter_1' ? 'Yang Tidak Pernah Melakukan Pembelian' : '' }}
           </h6>
-          <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i>
-            Tambah
-          </a>
+          <div>
+            <button type="button" class="btn btn-secondary me-2" data-bs-toggle="modal"
+              data-bs-target="#filterDataUserModal">
+              <i class="fas fa-filter"></i>
+              Filter
+            </button>
+            <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
+              <i class="fas fa-plus"></i>
+              Tambah
+            </a>
+          </div>
         </div>
         <!-- Card Body -->
         <div class="card-body">
           {{ $dataTable->table(['class' => 'table table-bordered table-striped']) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="filterDataUserModal" tabindex="-1" aria-labelledby="filterDataUserModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filterDataUserModalLabel">Filter Data</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Filter data berdasarkan:</h6>
+          <form action="{{ route('admin.users.index') }}" method="GET" id="formFilter">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <a href="#" class="text-decoration-none text-reset btn-filter">
+                  User yang tidak pernah melakukan pembelian
+                </a>
+                <button type="submit" class="d-none" name="action" value="filter_1">
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="text-decoration-none text-reset btn-filter">
+
+                </a>
+                <button class="d-none" name="action" value="filter_2">
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="text-decoration-none text-reset btn-filter">
+
+                </a>
+                <button class="d-none" name="action" value="filter_3">
+              </li>
+            </ul>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmit">Simpan</button>
         </div>
       </div>
     </div>
@@ -159,12 +207,9 @@
         })
       }
 
-      // $("#users-table").on("click.dt", ".btn-edit", function(e){
-      //   e.preventDefault();
-      //   let id = $(this).data('id');
-      //   $("#modalEditUser").modal('toggle');
-      //   Livewire.emit('edit', id);
-      // });
+      $(".btn-filter").on("click", function(e) {
+        $(this).next().click();
+      });
     })
   </script>
 @endpush

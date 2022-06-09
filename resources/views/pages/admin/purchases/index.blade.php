@@ -22,10 +22,47 @@
           <h6 class="m-0 font-weight-bold">
             Daftar Pembelian Obat
           </h6>
+          <button type="button" class="btn btn-secondary me-2" data-bs-toggle="modal"
+            data-bs-target="#filterPurchaseModal">
+            <i class="fas fa-filter"></i>
+            Filter
+          </button>
         </div>
         <!-- Card Body -->
         <div class="card-body">
           {{ $dataTable->table(['class' => 'table table-bordered table-striped']) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="filterPurchaseModal" tabindex="-1" aria-labelledby="filterPurchaseModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filterPurchaseModalLabel">Filter Data</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Filter data berdasarkan:</h6>
+          <form action="{{ route('admin.purchases.index') }}" method="GET" id="formFilter">
+            <div class="mb-3">
+              <label for="selectStatus" class="form-label">Status</label>
+              <select class="form-control form-select" name="status" id="selectStatus">
+                <option value="all">semua status</option>
+                @foreach (config('const')['purchase_statuses'] as $item)
+                  <option value="{{ $item }}" {{ request()->status == $item ? 'selected' : '' }}>
+                    {{ $item }}</option>
+                @endforeach
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmit">Simpan</button>
         </div>
       </div>
     </div>
@@ -39,5 +76,9 @@
       let purchasesTable = window.LaravelDataTables['purchases-table'];
       $("#purchases-table_wrapper").addClass('table-responsive');
     })
+
+    $("#btnSubmit").on("click", function(e) {
+      $("#formFilter").submit();
+    });
   </script>
 @endpush

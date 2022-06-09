@@ -38,6 +38,7 @@
   @include('sweetalert::alert')
   @stack('scripts')
   <script src="{{ asset('vendor/fontawesome-free/js/all.js') }}"></script>
+  <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
   <script>
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {

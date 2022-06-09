@@ -8,7 +8,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class DrugDataTable extends DataTable
+class UserProfileDataTable extends DataTable
 {
     /**
      * Build DataTable class.

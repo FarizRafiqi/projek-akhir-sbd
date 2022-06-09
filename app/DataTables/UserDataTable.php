@@ -65,6 +65,10 @@ class UserDataTable extends DataTable
      */
     public function query(User $model)
     {
+        if ($this->filter) {
+            return $this->filter;
+        }
+        
         return $model->newQuery();
     }
 

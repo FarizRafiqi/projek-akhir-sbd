@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductCatalogController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,8 +37,10 @@ Route::get("/produk/{drug:slug}", [ProductCatalogController::class, "detailProdu
 
 Route::group(["middleware" => "auth"], function () {
     Route::get("/checkout", [CheckoutController::class, "index"])->name("checkout");
+    Route::post("/payment-success", [CheckoutController::class, "process"])->name("process-purchase");
     Route::delete("/keranjang/destroy-selected-item", [CartController::class, "massDestroy"])->name("keranjang.massDestroy");
     Route::resource("/keranjang", CartController::class);
+    Route::resource("/profil-akun", UserProfileController::class)->except("create", "store", "destroy", "show");
 });
 
 Route::group(["as" => "admin.", "prefix" => "admin-panel", "middleware" => ["auth", "admin"]], function () {

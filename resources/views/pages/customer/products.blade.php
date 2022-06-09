@@ -17,8 +17,8 @@
             <div class="row">
               <label for="sortProduct" class="col col-form-label text-end fw-bold">Sort</label>
               <select id="sortProduct" class="form-control col">
-                <option value="">Nama Produk (A-Z)</option>
-                <option value="">Nama Produk (Z-A)</option>
+                <option value="asc">Nama Produk (A-Z)</option>
+                <option value="desc">Nama Produk (Z-A)</option>
               </select>
             </div>
           </div>
@@ -247,7 +247,12 @@
       <!-- End of Filter -->
 
       <div class="col-lg-9 col-md-8 ps-4">
-        <span>Menampilkan <span class="fw-bold" id="totalProduct">{{ $drugs->count() }}</span> obat.</span>
+        <div>Menampilkan <span class="fw-bold" id="totalProduct">{{ $drugs->count() }}</span> obat.</div>
+        <div class="text-center d-none" id="loading">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
         <div class="row mt-4" id="product-list">
           @forelse ($drugs as $drug)
             <div class="col col-md-3">
@@ -277,6 +282,7 @@
       "brands": [],
       "drug_forms": [],
       "drug_types": [],
+      "order_by": "asc"
     }
 
     $("#drugTypeFilter input:checked").each(function() {
@@ -327,7 +333,7 @@
           selectedFilter["drug_types"].splice(idx, 1);
         }
       }
-      console.log(selectedFilter)
+
       setTimeout(() => {
         filterProduct(selectedFilter);
       }, 1000);
@@ -399,6 +405,7 @@
         method: 'POST',
         url: "{{ route('search-product') }}",
         data,
+        beforeSend: () => $("#loading").removeClass("d-none"),
         success: (result, status, xhr) => {
           if (result) {
             const totalData = parseInt(result.length);
@@ -417,7 +424,7 @@
 
               let url = "{{ route('product-detail', ':id') }}";
               url = url.replace(":id", data.slug)
-              
+
               $("#product-list").append(`
                 <div class="col col-md-3">
                   <a href=${url} class="text-decoration-none text-reset" title="${data.name}">
@@ -435,7 +442,13 @@
             });
           }
         },
+        complete: () => $("#loading").addClass("d-none")
       })
     }
+
+    $("#sortProduct").on("change", function() {
+      selectedFilter["order_by"] = $(this).val();
+      filterProduct(selectedFilter)
+    })
   </script>
 @endpush

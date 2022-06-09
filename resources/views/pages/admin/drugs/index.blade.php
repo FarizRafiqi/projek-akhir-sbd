@@ -6,7 +6,6 @@
     .select-info {
       margin-left: 0.25rem;
     }
-
   </style>
 @endpush
 @section('content')
@@ -23,6 +22,17 @@
 
   <!-- Content Row -->
   <div class="row">
+    @if (request()->action)
+      <div class="col-12">
+        <div class="alert alert-primary" role="alert">
+          @if (isset($priceAvg))
+            Rata-rata harga obat : @rupiah($priceAvg)
+          @elseif(isset($priceMax))
+            Harga obat termahal : @rupiah($priceMax)
+          @endif
+        </div>
+      </div>
+    @endif
     <div class="col-xl-12 col-lg-7">
       <div class="card shadow mb-4">
         <!-- Card Header -->
@@ -30,29 +40,67 @@
           <h6 class="m-0 font-weight-bold">
             Daftar Obat
           </h6>
-          <a href="{{ route('admin.drugs.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i>
-            Tambah
-          </a>
-          {{-- <div class="dropdown no-arrow">
-            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+          <div>
+            <button type="button" class="btn btn-secondary me-2" data-bs-toggle="modal"
+              data-bs-target="#filterDrugModal">
+              <i class="fas fa-filter"></i>
+              Filter
+            </button>
+            <a href="{{ route('admin.drugs.create') }}" class="btn btn-primary">
+              <i class="fas fa-plus"></i>
+              Tambah
             </a>
-            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-              <div class="dropdown-header">
-                Dropdown Header:
-              </div>
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </div> --}}
+          </div>
         </div>
         <!-- Card Body -->
         <div class="card-body">
           {{ $dataTable->table(['class' => 'table table-bordered table-striped']) }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="filterDrugModal" tabindex="-1" aria-labelledby="filterDrugModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filterDrugModalLabel">Filter Data</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Filter data berdasarkan:</h6>
+          <form action="{{ route('admin.drugs.index') }}" method="GET" id="formFilter">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <a href="#" class="text-decoration-none text-reset btn-filter" id="filterObat1">
+                  Obat dengan harga
+                  <span class="text-danger"><i class="fas fa-chevron-right"></i></span> rata-rata
+                </a>
+                <button type="submit" class="d-none" name="action" value="filter_1">
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="text-decoration-none text-reset btn-filter" id="filterObat2">
+                  Obat dengan harga
+                  <span class="text-danger">
+                    <i class="fas fa-chevron-left"></i>
+                  </span>
+                  rata-rata
+                </a>
+                <button class="d-none" name="action" value="filter_2">
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="text-decoration-none text-reset btn-filter" id="filterObat3">
+                  Obat dengan harga termahal
+                </a>
+                <button class="d-none" name="action" value="filter_3">
+              </li>
+            </ul>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-primary">Simpan</button>
         </div>
       </div>
     </div>
@@ -159,12 +207,9 @@
         });
       }
 
-      // $("#taxrate-table").on("click.dt", ".btn-edit", function(e){
-      //   e.preventDefault();
-      //   let id = $(this).data('id');
-      //   $("#modalEditTaxRate").modal('toggle');
-      //   Livewire.emit('edit', id);
-      // });
+      $(".btn-filter").on("click", function(e) {
+        $(this).next().click();
+      });
     })
   </script>
 @endpush

@@ -5,41 +5,24 @@
     <div class="row g-5">
       <div class="col-md-5 col-lg-4 order-md-last">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-primary">Your cart</span>
-          <span class="badge bg-primary rounded-pill">3</span>
+          <span class="text-primary">Keranjangmu</span>
+          <span class="badge bg-primary rounded-pill">{{ count(session('cart')) }}</span>
         </h4>
         <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product name</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$12</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Second product</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$8</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Third item</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between bg-light">
-            <div class="text-success">
-              <h6 class="my-0">Promo code</h6>
-              <small>EXAMPLECODE</small>
-            </div>
-            <span class="text-success">−$5</span>
-          </li>
+          @forelse (session('cart') as $id => $cart)
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0 text-break" title="{{ $cart['name'] }}">{{ $cart['name'] }}</h6>
+                <small class="text-muted">Jumlah x{{ $cart['quantity'] }}</small>
+              </div>
+              <span class="text-muted">@rupiah($cart['price'])</span>
+            </li>
+          @empty
+            Keranjang kosong
+          @endforelse
           <li class="list-group-item d-flex justify-content-between">
-            <span>Total (USD)</span>
-            <strong>$20</strong>
+            <span>Total</span>
+            <strong>@rupiah(session('detail.total_payment'))</strong>
           </li>
         </ul>
 
@@ -54,85 +37,41 @@
         <div class="card">
           <div class="card-body">
             <h4 class="mb-3">Checkout</h4>
-            <form class="needs-validation" novalidate="">
+            <form class="needs-validation" action="{{ route('process-purchase') }}" method="POST">
+              @csrf
+              <input type="hidden" name="total_payment" value="{{ session('detail.total_payment') }}">
               <div class="row g-3">
                 <div class="col-sm-6">
-                  <label for="firstName" class="form-label">First name</label>
-                  <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
-                  <div class="invalid-feedback">
-                    Valid first name is required.
-                  </div>
+                  <label for="name" class="form-label">Nama</label>
+                  <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                    placeholder="Masukkan nama" name="name" value="{{ auth()->user()->name }}">
+                  @error('name')
+                    <div class="invalid-feedback">
+                      {{ $message }}
+                    </div>
+                  @enderror
                 </div>
 
                 <div class="col-sm-6">
-                  <label for="lastName" class="form-label">Last name</label>
-                  <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
-                  <div class="invalid-feedback">
-                    Valid last name is required.
-                  </div>
-                </div>
-
-                <div class="col-12">
-                  <label for="username" class="form-label">Username</label>
-                  <div class="input-group has-validation">
-                    <span class="input-group-text">@</span>
-                    <input type="text" class="form-control" id="username" placeholder="Username" required="">
+                  <label for="phoneNum" class="form-label">No. Telepon</label>
+                  <input type="text" class="form-control @error('phone_num') is-invalid @enderror" id="phoneNum"
+                    placeholder="Masukkan nomor telepon" name="phone_num" value="{{ auth()->user()->phone_num ?? '' }}">
+                  @error('phone_num')
                     <div class="invalid-feedback">
-                      Your username is required.
+                      {{ $message }}
                     </div>
-                  </div>
+                  @enderror
                 </div>
 
                 <div class="col-12">
-                  <label for="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
-                  <input type="email" class="form-control" id="email" placeholder="you@example.com">
-                  <div class="invalid-feedback">
-                    Please enter a valid email address for shipping updates.
-                  </div>
-                </div>
-
-                <div class="col-12">
-                  <label for="address" class="form-label">Address</label>
-                  <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
-                  <div class="invalid-feedback">
-                    Please enter your shipping address.
-                  </div>
-                </div>
-
-                <div class="col-12">
-                  <label for="address2" class="form-label">Address 2 <span
-                      class="text-muted">(Optional)</span></label>
-                  <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-                </div>
-
-                <div class="col-md-5">
-                  <label for="country" class="form-label">Country</label>
-                  <select class="form-select" id="country" required="">
-                    <option value="">Choose...</option>
-                    <option>United States</option>
-                  </select>
-                  <div class="invalid-feedback">
-                    Please select a valid country.
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <label for="state" class="form-label">State</label>
-                  <select class="form-select" id="state" required="">
-                    <option value="">Choose...</option>
-                    <option>California</option>
-                  </select>
-                  <div class="invalid-feedback">
-                    Please provide a valid state.
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <label for="zip" class="form-label">Zip</label>
-                  <input type="text" class="form-control" id="zip" placeholder="" required="">
-                  <div class="invalid-feedback">
-                    Zip code required.
-                  </div>
+                  <label for="address" class="form-label">Alamat Pengiriman</label>
+                  <textarea class="form-control @error('address') is-invalid @enderror" id="address" name="address"
+                    placeholder="Contoh: Gg. Lestari 2"></textarea>
+                  @error('address')
+                    <div class="invalid-feedback">
+                      {{ $message }}
+                    </div>
+                  @enderror
                 </div>
               </div>
 
@@ -140,72 +79,57 @@
 
               <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="same-address">
-                <label class="form-check-label" for="same-address">Shipping address is the same as my billing
-                  address</label>
+                <label class="form-check-label" for="same-address">Alamat pengiriman sama dengan alamat tagihan</label>
               </div>
 
               <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="save-info">
-                <label class="form-check-label" for="save-info">Save this information for next time</label>
+                <label class="form-check-label" for="save-info">Simpan informasi untuk lain waktu</label>
               </div>
 
               <hr class="my-4">
 
-              <h4 class="mb-3">Payment</h4>
+              <h4 class="mb-3">Metode Pembayaran</h4>
 
               <div class="my-3">
                 <div class="form-check">
-                  <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
-                  <label class="form-check-label" for="credit">Credit card</label>
+                  <input id="bca" name="payment_method" type="radio" class="form-check-input">
+                  <label class="form-check-label" for="bca">BCA</label>
                 </div>
                 <div class="form-check">
-                  <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required="">
-                  <label class="form-check-label" for="debit">Debit card</label>
+                  <input id="bni" name="payment_method" type="radio" class="form-check-input">
+                  <label class="form-check-label" for="bni">BNI</label>
                 </div>
                 <div class="form-check">
-                  <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required="">
-                  <label class="form-check-label" for="paypal">PayPal</label>
+                  <input id="mandiri" name="payment_method" type="radio" class="form-check-input">
+                  <label class="form-check-label" for="mandiri">Mandiri</label>
                 </div>
-              </div>
-
-              <div class="row gy-3">
-                <div class="col-md-6">
-                  <label for="cc-name" class="form-label">Name on card</label>
-                  <input type="text" class="form-control" id="cc-name" placeholder="" required="">
-                  <small class="text-muted">Full name as displayed on card</small>
-                  <div class="invalid-feedback">
-                    Name on card is required
-                  </div>
+                <div class="form-check">
+                  <input id="permata" name="payment_method" type="radio" class="form-check-input">
+                  <label class="form-check-label" for="permata">Permata</label>
                 </div>
-
-                <div class="col-md-6">
-                  <label for="cc-number" class="form-label">Credit card number</label>
-                  <input type="text" class="form-control" id="cc-number" placeholder="" required="">
-                  <div class="invalid-feedback">
-                    Credit card number is required
-                  </div>
+                <div class="form-check">
+                  <input id="ovo" name="payment_method" type="radio" class="form-check-input">
+                  <label class="form-check-label" for="ovo">Ovo</label>
                 </div>
-
-                <div class="col-md-3">
-                  <label for="cc-expiration" class="form-label">Expiration</label>
-                  <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
-                  <div class="invalid-feedback">
-                    Expiration date required
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <label for="cc-cvv" class="form-label">CVV</label>
-                  <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
-                  <div class="invalid-feedback">
-                    Security code required
-                  </div>
+                <div class="form-check">
+                  <input id="gopay" name="payment_method" type="radio" class="form-check-input">
+                  <label class="form-check-label" for="gopay">Gopay</label>
                 </div>
               </div>
 
               <hr class="my-4">
-
-              <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+              <h4 class="mb-3">Bayar</h4>
+              <div class="mb-3">
+                <input type="number" class="form-control @error('paid') is-invalid @enderror" id="paid"
+                  placeholder="Masukkan jumlah uang Anda." name="paid" value="">
+                @error('paid')
+                  <div class="invalid-feedback">
+                    {{ $message }}
+                  </div>
+                @enderror
+              </div>
+              <button class="w-100 btn btn-primary btn-lg" type="submit">Bayar</button>
             </form>
           </div>
         </div>
@@ -213,3 +137,14 @@
     </div>
   </div>
 @endsection
+@push('scripts')
+  <script>
+    $("#same-address").on("click", function() {
+      if ($(this).is(":checked")) {
+        $("#address").text("{{ auth()->user()->address }}")
+      } else {
+        $("#address").text("")
+      }
+    })
+  </script>
+@endpush

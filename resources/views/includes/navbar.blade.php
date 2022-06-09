@@ -10,11 +10,11 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse ms-2" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse ms-2 py-2" id="navbarSupportedContent">
 
       <!-- Left Side Of Navbar -->
       <ul class="navbar-nav col-md-4 mt-4 mt-md-0">
-        @if (!Route::is('checkout'))
+        @if (!Route::is(['checkout', 'login', 'register']))
           <form action="#" class="w-100" role="search">
             <div class="input-group">
               <input type="search" class="form-control border-end-0" placeholder="Cari obat...">
@@ -44,8 +44,14 @@
           @else
             @if (!Route::is('checkout'))
               <li class="nav-item">
-                <a class="nav-link" href="{{ route('keranjang.index') }}">
-                  <i class="fas fa-shopping-cart"></i>
+                <a class="nav-link position-relative" href="{{ route('keranjang.index') }}">
+                  <i class="fas fa-shopping-cart fs-5"></i>
+                  @if (session('cart'))
+                    <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
+                      {{ count(session('cart')) }}
+                      <span class="visually-hidden">unread messages</span>
+                    </span>
+                  @endif
                   <span class="d-md-none">Pesanan saya</span>
                 </a>
               </li>
@@ -56,6 +62,9 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{{ route('profil-akun.index') }}">
+                    Profil
+                  </a>
                   <a class="dropdown-item" href="{{ route('logout') }}" id="logoutBtn">
                     {{ __('Logout') }}
                   </a>

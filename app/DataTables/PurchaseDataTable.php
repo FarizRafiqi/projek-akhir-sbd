@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Purchase;
+use App\Models\User;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
@@ -69,6 +70,10 @@ class PurchaseDataTable extends DataTable
      */
     public function query(Purchase $model)
     {
+        if ($this->filter) {
+            return $this->filter;
+        }
+
         return $model->newQuery();
     }
 
@@ -79,19 +84,31 @@ class PurchaseDataTable extends DataTable
      */
     public function html()
     {
-        return $this->builder()
-            ->setTableId('purchases-table')
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->dom('Bfrtip')
-            ->orderBy(1, 'asc')
-            ->buttons(
-                Button::make('export')->text('<i class="fas fa-download"></i> Ekspor'),
-                Button::make('print')->text('<i class="fas fa-print"></i> Cetak'),
-            )->parameters([
-                'paging' => true,
-                'responsive' => true,
-            ]);
+        $user = User::find(auth()->id());
+        if ($user->isAdmin() || $user->isStaff()) {
+            return $this->builder()
+                ->setTableId('purchases-table')
+                ->columns($this->getColumns())
+                ->minifiedAjax()
+                ->dom('Bfrtip')
+                ->orderBy(1, 'asc')
+                ->buttons(
+                    Button::make('export')->text('<i class="fas fa-download"></i> Ekspor'),
+                    Button::make('print')->text('<i class="fas fa-print"></i> Cetak'),
+                )->parameters([
+                    'paging' => true,
+                    'responsive' => true,
+                ]);
+        } else {
+            return $this->builder()
+                ->setTableId('purchases-table')
+                ->columns($this->getColumns())
+                ->minifiedAjax()
+                ->orderBy(1, 'asc')->parameters([
+                    'paging' => true,
+                    'responsive' => true,
+                ]);
+        }
     }
 
     /**

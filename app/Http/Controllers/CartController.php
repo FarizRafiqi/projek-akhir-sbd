@@ -15,7 +15,22 @@ class CartController extends Controller
     public function index()
     {
         // dd(session('cart'));
-        return view('pages.customer.cart');
+        $cart = session('cart');
+
+        if (!$cart) {
+            return view('pages.customer.cart');
+        }
+
+        $subTotal = 0;
+        foreach ($cart as $value) {
+            $subTotal += $value["price"] * $value["quantity"];
+        }
+
+        $adminFee = 2500;
+        $totalPayment = $subTotal + $adminFee;
+
+        session(["detail" => ["admin_fee" => $adminFee, "sub_total" => $subTotal, "total_payment" => $totalPayment]]);
+        return view('pages.customer.cart', compact("subTotal", "totalPayment", "adminFee"));
     }
 
     /**
@@ -123,8 +138,12 @@ class CartController extends Controller
 
             return response("Produk-produk berhasil dihapus dari keranjang");
         } else {
-            session()->forget('cart');
-            return response("Keranjang berhasil dikosongkan.");
+            if ((bool)$request->delete_all == true) {
+                session()->forget('cart');
+                return response("Keranjang berhasil dikosongkan.");
+            } elseif ((bool)$request->delete_all == false && !$request->has("selected_items")) {
+                return response("Tidak ada produk yang dihapus.");
+            }
         }
     }
 }

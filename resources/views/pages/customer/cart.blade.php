@@ -3,7 +3,7 @@
 @section('content')
   <div class="container w-75">
     <div class="row mt-4">
-      <div class="col-md-7 col-lg-8">
+      <div class="{{ session('cart') ? 'col-md-7 col-lg-8' : 'col-12' }}">
         <ul class="list-group">
           @if (session('cart'))
             <div class="list-group-item bg-transparent border-top-0 border-start-0 border-end-0">
@@ -21,7 +21,7 @@
               </div>
             </div>
             @forelse (session('cart') as $id => $cart)
-              <li class="list-group-item {{ count(session('cart')) > 1 ? 'border-bottom-0' : '' }}">
+              <li class="list-group-item {{ count(session('cart')) > 1 && !$loop->last ? 'border-bottom-0' : '' }}">
                 <div class="d-flex align-items-start mt-3">
                   <input class="form-check-input checkbox-item me-3" type="checkbox" value="{{ $id }}">
                   <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
@@ -54,15 +54,64 @@
           @else
             <li class="list-group-item text-center p-5">
               <h5 class="fw-bold">Ayo Belanja!</h5>
-              <p>Keranjangmu masih kosong. <br>Ayo isi dengan produk-produk terbaik {{ env('APP_NAME') }}</p>
+              <p>Keranjangmu masih kosong. <br>Ayo isi dengan produk-produk terbaik {{ env('APP_NAME') }}!</p>
+              <a href="{{ route('home') }}" class="btn btn-primary w-25">Belanja</a>
             </li>
           @endif
         </ul>
       </div>
 
-      <div class="col-md-5 col-lg-4">
-
-      </div>
+      @if (session('cart'))
+        <div class="{{ session('cart') ? 'col-md-5 col-lg-4 mt-3' : 'd-none' }}">
+          <h5 class="mb-3">
+            Ringkasan Belanja
+          </h5>
+          <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <h6 class="my-0">Total Harga ({{ count(session('cart')) }} produk)</h6>
+              <span class="text-muted">
+                @if (isset($subTotal))
+                  @rupiah($subTotal)
+                @endif
+              </span>
+            </li>
+            <li class="list-group-item">
+              <h6 class="my-0">Biaya lainnya</h6>
+              <ul>
+                <li>
+                  <div class="d-flex justify-content-between">
+                    <span>Biaya Admin</span>
+                    <span class="text-muted">
+                      @if (isset($adminFee))
+                        @rupiah($adminFee)
+                      @endif
+                    </span>
+                  </div>
+                </li>
+                <li>
+                  <div class="d-flex justify-content-between">
+                    <span>Ongkir</span>
+                    <span class="text-muted">
+                      Gratis
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Total (IDR)</span>
+              <strong>
+                @if (isset($totalPayment))
+                  @rupiah($totalPayment)
+                @endif
+              </strong>
+            </li>
+            <li class="list-group-item p-0">
+              <a href="{{ route('checkout') }}" class="btn btn-primary w-100">Checkout</a>
+            </li>
+          </ul>
+        </div>
+      @endif
     </div>
   </div>
 
@@ -134,6 +183,10 @@
       }
     });
 
+    $("li.list-group-item input:checked").each(function() {
+      selectedItems.push($(this).val());
+    });
+
     $("#selectAll").on("click", function(e) {
       if ($(this).is(":checked")) {
         $("input[type='checkbox']").prop("checked", true);
@@ -182,18 +235,23 @@
     })
 
     $("#btnDeleteSelectedItem").on("click", function() {
+      let deleteAll = false;
+      if($("#selectAll").is(":checked")) {
+        deleteAll = true
+      }
       $("#modalWarning .modal-title").html("Hapus Semua Produk");
       $("#modalWarning .modal-body").html("<b>Apakah kamu yakin akan menghapus semua produk terpilih?</b>");
-
-      const data = {
+     
+      let data = {
         "selected_items": selectedItems,
-        _method: 'DELETE',
-      }
-
+        "_method": 'DELETE',
+        "delete_all": deleteAll
+      };
+      
       $("#modalWarning #btnAgree").on("click", function() {
         $.ajax({
           headers: {
-            "x-csrf-token": "{{ csrf_token() }}"
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
           },
           method: 'POST',
           url: "{{ route('keranjang.massDestroy') }}",

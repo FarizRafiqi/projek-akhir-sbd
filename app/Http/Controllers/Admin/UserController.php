@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyDrugRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Purchase;
 use App\Models\Role;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +24,22 @@ class UserController extends Controller
     public function index(UserDataTable $dataTable)
     {
         abort_if(Gate::denies("user_access"), Response::HTTP_FORBIDDEN, "Forbidden");
-        return $dataTable->render("pages.admin.users.index");
+        $action = request()->action;
+
+        $filter = null;
+        if ($action == "filter_1") {
+            /**
+             * SELECT users.id, name, sex
+             * FROM users 
+             *  WHERE users.id NOT IN (
+             *  SELECT DISTINCT user_id FROM purchases
+             * );
+             */
+
+            $userIds = Purchase::select("user_id")->distinct()->get();
+            $filter = User::whereNotIn("id", $userIds);
+        }
+        return $dataTable->with("filter", $filter)->render("pages.admin.users.index");
     }
 
     /**
