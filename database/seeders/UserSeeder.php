@@ -58,5 +58,7 @@ class UserSeeder extends Seeder
                 "sex" => "female"
             ]
         ]);
+
+        User::factory(100)->create();
     }
 }

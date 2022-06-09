@@ -68,18 +68,6 @@
                 </a>
                 <button type="submit" class="d-none" name="action" value="filter_1">
               </li>
-              <li class="list-group-item">
-                <a href="#" class="text-decoration-none text-reset btn-filter">
-
-                </a>
-                <button class="d-none" name="action" value="filter_2">
-              </li>
-              <li class="list-group-item">
-                <a href="#" class="text-decoration-none text-reset btn-filter">
-
-                </a>
-                <button class="d-none" name="action" value="filter_3">
-              </li>
             </ul>
           </form>
         </div>
