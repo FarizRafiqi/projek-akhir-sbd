@@ -24,7 +24,7 @@
                   Pelanggan
                 </div>
                 <div class="h5 mb-0 fw-bold text-gray-800">
-                  0
+                  {{ $users }}
                 </div>
               </div>
               <div class="col-auto">

@@ -19,6 +19,13 @@ class ProductCatalogController extends Controller
         $drugForms = DrugForm::all();
         $brands = Brand::all();
         $drugs = Drug::all();
+
+        if ($request->name) {
+            $drugs = $drugs->filter(function ($item) use ($request) {
+                return false !== stristr($item->name, $request->name);
+            });
+        }
+
         return view("pages.customer.products", compact("drugTypes", "drugForms", "brands", "drugs"));
     }
 
@@ -36,7 +43,7 @@ class ProductCatalogController extends Controller
 
     public function searchProduct(Request $request)
     {
-        $result = Drug::where(function ($query) use ($request) {
+        $drugs = Drug::where(function ($query) use ($request) {
             $query->when(!empty($request->brands), function ($query) use ($request) {
                 $query->whereIn("brand_id", $request->brands);
             })->when(!empty($request->drug_types), function ($query) use ($request) {
@@ -45,10 +52,14 @@ class ProductCatalogController extends Controller
                 $query->whereIn("drug_form_id", $request->drug_forms);
             })->when(!empty($request->price), function ($query) use ($request) {
                 $query->whereBetween("price", [$request->price["min"], $request->price["max"]]);
+            })->when(!empty($request->name), function ($query) use ($request) {
+                $query->where("name", "like", "%" . $request->name . "%");
             });
-        })->orderBy("name", $request->order_by)->get();
+        })->orderBy("name", $request->order_by ?? "asc")->get();
 
-        return response($result);
+        if ($request->ajax()) {
+            return response($drugs);
+        }
     }
 
     public function detailProduct(Drug $drug)

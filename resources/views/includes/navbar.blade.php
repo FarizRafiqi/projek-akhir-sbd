@@ -15,11 +15,12 @@
       <!-- Left Side Of Navbar -->
       <ul class="navbar-nav col-md-4 mt-4 mt-md-0">
         @if (!Route::is(['checkout', 'login', 'register']))
-          <form action="#" class="w-100" role="search">
+          <form action="{{ route('product-catalog') }}" method="GET" class="w-100">
             <div class="input-group">
-              <input type="search" class="form-control border-end-0" placeholder="Cari obat...">
-              <button class="input-group-text bg-light border-start-0" id="search"><i
-                  class="fas fa-search"></i></button>
+              <input type="search" class="form-control border-end-0" name="name" placeholder="Cari obat...">
+              <button class="input-group-text bg-light border-start-0" id="search">
+                <i class="fas fa-search"></i>
+              </button>
             </div>
           </form>
         @endif

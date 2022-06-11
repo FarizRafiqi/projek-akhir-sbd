@@ -387,6 +387,7 @@
         "brands": [],
         "drug_forms": [],
         "drug_types": [],
+        "order_by": "asc"
       }
 
       setTimeout(() => {

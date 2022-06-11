@@ -23,7 +23,7 @@
                     <div class="row">
                       <div class="col-4 text-center text-md-start">
                         <img
-                          src="{{ auth()->user()->image ? Storage::url('/img/avatar/' . auth()->user()->image) : asset('img/no-img.jpg') }}"
+                          src="{{ auth()->user()->image ? Storage::url('img/avatar/' . auth()->id() . '/' . auth()->user()->image) : asset('img/no-img.jpg') }}"
                           class="img-thumbnail" alt="{{ auth()->user()->name }}" width="250" height="250">
                       </div>
                       <div class="col-8">
@@ -49,8 +49,8 @@
                         <form action="">
                           <ul class="nav nav-pills mb-3" id="pills-tab">
                             <li class="nav-item" role="presentation">
-                              <a class="nav-link {{ request()->status == 'success' ? 'active' : '' }}" id="pills-success-tab" data-bs-toggle="pill"
-                                href="#pills-success">Sukses</a>
+                              <a class="nav-link {{ request()->status == 'success' ? 'active' : '' }}"
+                                id="pills-success-tab" data-bs-toggle="pill" href="#pills-success">Sukses</a>
                               <button type="submit" class="d-none" name="status" value="success"></button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -66,7 +66,8 @@
                           </ul>
                         </form>
                         <div class="tab-content" id="pills-tabContent">
-                          <div class="tab-pane fade show active" id="pills-success">
+                          <div class="tab-pane fade {{ request()->status == 'success' ? 'show active' : '' }}"
+                            id="pills-success">
                             @if (isset($count))
                               <div class="mb-3">
                                 Total Pembelian Sukses : {{ $count }}
@@ -74,7 +75,8 @@
                             @endif
                             {{ $dataTable->table(['table table-bordered table-striped']) }}
                           </div>
-                          <div class="tab-pane fade" id="pills-pending">
+                          <div class="tab-pane fade {{ request()->status == 'pending' ? 'show active' : '' }}"
+                            id="pills-pending">
                             @if (isset($count))
                               <div class="mb-3">
                                 Total Pembelian Menunggu : {{ $count }}
@@ -82,7 +84,8 @@
                             @endif
                             {{ $dataTable->table(['table table-bordered table-striped']) }}
                           </div>
-                          <div class="tab-pane fade" id="pills-failed">
+                          <div class="tab-pane fade {{ request()->status == 'failed' ? 'show active' : '' }}"
+                            id="pills-failed">
                             @if (isset($count))
                               <div class="mb-3">
                                 Total Pembelian Gagal : {{ $count }}
